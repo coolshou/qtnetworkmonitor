@@ -4,7 +4,7 @@
 
 TEMPLATE = app
 TARGET = QtNetworkMon
-
+QT += gui widgets
 INCLUDEPATH += .
 
 CONFIG += console

@@ -26,8 +26,9 @@ vector<string> PcapHandler::get_messages()
 
 int PcapHandler::FindAvailDevices(vector<string> * outDevices)
 {
-    if (outDevices!= NULL)
+    if (outDevices!= NULL){
         outDevices->clear();
+    }
 
 	pcap_if_t *d;// Iterator
 	char errbuf[PCAP_ERRBUF_SIZE];

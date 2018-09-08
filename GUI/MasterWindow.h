@@ -2,6 +2,12 @@
 #define MASTERWINDOW_H
 
 #include <QMainWindow>
+#include <QAction>
+#include <QSystemTrayIcon>
+#include <QCloseEvent>
+#include <QMenu>
+#include <QComboBox>
+#include <QMenuBar>
 
 #include "MainWindow.h"
 

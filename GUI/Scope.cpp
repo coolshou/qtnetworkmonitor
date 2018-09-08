@@ -33,7 +33,7 @@ void Scope::Set_Data(vector<float> data_in, int target)
     data[target].assign(data_in.begin(), data_in.end());
     Scale[target] = Find_Scale(data_in);
 }
-
+/*
 float abs(float Fin)
 {
     if (Fin < 0)
@@ -41,7 +41,7 @@ float abs(float Fin)
     else
         return Fin;
 }
-
+*/
 vector<float> Scope::Find_Scale(vector<float> in_Data)
 {
     vector<float> Scale(4);
