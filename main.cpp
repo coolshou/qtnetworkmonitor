@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
     cout<<"App. Begin"<<endl;
 
     QApplication app(argc, argv);
+    QApplication::setApplicationName("qtnetworkmonitor");
+    QApplication::setOrganizationName("coolshou.idv");
 
     MasterWindow MasterWin;
     MasterWin.show();
