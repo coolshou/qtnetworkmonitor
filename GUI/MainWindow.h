@@ -26,6 +26,8 @@
 #include "Console.h"
 #include "./IO/ReadWriteFile.h"
 
+#include <QDebug>
+
 class MainWindow : public QWidget
 {
     Q_OBJECT
@@ -68,8 +70,11 @@ class MainWindow : public QWidget
 
        //!Shows/Hide the console
        void toggleConsoleView();
+       void showAbout();
 
     private:
+        QString homePath;
+        QString StatsFile;
 
         //GUI fns
         void setupGUI();

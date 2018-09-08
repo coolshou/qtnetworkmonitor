@@ -1,8 +1,9 @@
 #include "MasterWindow.h"
 
+
 MasterWindow::MasterWindow()
 {
-    setWindowTitle(tr("Qt Network Monitor v.: 0.3 beta"));
+    setWindowTitle(tr("Qt Network Monitor v%1").arg(qApp->applicationVersion()));
     resize(520, 340);
 
     widgetMainWindow = new MainWindow();
@@ -40,6 +41,9 @@ void MasterWindow::buildMenu()
     ShowHideConsoleAct = new QAction(tr("&Console"), this);
     ShowHideConsoleAct->setStatusTip(tr("Show/Hide Console"));
     connect(ShowHideConsoleAct, SIGNAL(triggered()), widgetMainWindow, SLOT(toggleConsoleView()));
+    AboutAct = new QAction(tr("&Console"), this);
+    AboutAct->setStatusTip(tr("About"));
+    connect(AboutAct, SIGNAL(triggered()), widgetMainWindow, SLOT(showAbout()));
 
     showMenu = menuBar()->addMenu(tr("&Show/Hide"));
     showMenu->addAction(ShowHideConsoleAct);

@@ -1,7 +1,34 @@
 #include "MainWindow.h"
+#if QT_VERSION >= 0x050000
+#include <QStandardPaths>
+#else
+#include <QDesktopServices>
+#endif
+#include <QFile>
+#include <QDir>
 
 MainWindow::MainWindow()
 {
+#if QT_VERSION >= 0x050000
+    homePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+#else
+    homePath = QDesktopServices::storageLocation(QDesktopServices::TempLocation);
+#endif
+    QDir path(QDir::cleanPath(homePath + QDir::separator() + qApp->applicationName()));
+    StatsFile = path.filePath("Stats.dat");
+    if (! QDir(path.absolutePath()).exists()){
+        QDir().mkdir(path.absolutePath());
+    }
+    QFile file( StatsFile );
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream stream( &file );
+        stream << endl;
+        file.close();
+    }
+    if (! path.exists(StatsFile)) {
+        qDebug() << "file not exist: " << StatsFile;
+    }
     //Members inits:
     LastAmountData_download = 0;
     LastAmountData_upload = 0;
@@ -86,6 +113,7 @@ void  MainWindow::setupGUI()
     dataScope = new Scope(this);
 
     //About
+    /*
     AboutWebsite = new QPushButton("Click here to visit the project's website");
     AboutWebsite->setMaximumSize(QSize(600, 18));
     AboutWebsite->setFlat(true);
@@ -99,11 +127,11 @@ void  MainWindow::setupGUI()
     AboutWebsite->setPalette(QBluePalette);
 
     connect( AboutWebsite, SIGNAL( clicked() ), this, SLOT(About()) );
-
+    */
     {//Sets-up the layout
         QVBoxLayout *mainLayout = new QVBoxLayout;
 
-        mainLayout->addWidget(AboutWebsite, Qt::AlignBottom);
+        //mainLayout->addWidget(AboutWebsite, Qt::AlignBottom);
 
         mainLayout->addWidget(DropListDeviceGB);
         mainLayout->addWidget(DownloadUploadGB);
@@ -140,7 +168,7 @@ void MainWindow::About()
     cout<<"Opening a browser at the project's website."<<endl;
 
     QDesktopServices QDS;
-    QUrl ProjectWebsite(QString("http://reachme.web.googlepages.com/qtnetworkmonitor"));
+    QUrl ProjectWebsite(QString("https://github.com/coolshou/qtnetworkmonitor.git"));
     QDS.openUrl( ProjectWebsite );
 }
 
@@ -151,7 +179,10 @@ void MainWindow::toggleConsoleView()
     else
         Console->show();
 }
-
+void MainWindow::showAbout()
+{
+//TODO showAbout
+}
 int MainWindow::OpenDevice(int DeviceNO)
 {
     vector<string> * Devices = new vector<string>;
@@ -350,7 +381,8 @@ void MainWindow::LoadDataFromFile()
 {
     //Set the data offset
     InfoReadWrite Reader;
-    Reader.Read("Stats.dat");
+
+    Reader.Read(StatsFile.toUtf8().constData());
 
     if( Reader.getData().size() >= 2 )
         {
@@ -389,7 +421,7 @@ void MainWindow::SaveDataToFile()
     data_out.push_back( PCHandler.get_TotalDataUploaded_bytes() + Upload_offset);
 
     Writer.setData(data_out);
-    Writer.Write("Stats.dat");
+    Writer.Write(StatsFile.toUtf8().constData());
 }
 
 void LoadOptionsFromFile(){cout<<"Not implemented yet."<<endl;}

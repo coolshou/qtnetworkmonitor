@@ -1,0 +1,11 @@
+[Desktop Entry]
+Categories=System
+Exec=QtNetworkMon
+GenericName[en_US]=QtNetworkMon
+GenericName=QtNetworkMon
+Icon=QtNetworkMon.png
+Name[en_US]=QtNetworkMon
+Name=QtNetworkMon
+StartupNotify=true
+Terminal=false
+Type=Application

@@ -1,6 +1,6 @@
 Qt Network Monitor : A Free, Open Source, Portable (Windows, Unix / Linux) Network Monitor.
 
-Go to: http://reachme.web.googlepages.com/qtnetworkmonitor
+Go to: https://github.com/coolshou/qtnetworkmonitor.git
 for the latest version.
 
 Win32 installation:
@@ -18,6 +18,8 @@ Linux installation:
     It HAS to be run in super-user mode.
 
 Version history:
+    v 0.4: 2018
+        qt5 build
 
     v 0.2: (14 May 2007)
         Now saves data in file. Can have statistics on data on a daily basic. Data is kept between

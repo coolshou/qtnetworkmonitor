@@ -1,6 +1,13 @@
 TEMPLATE = app
 TARGET = QtNetworkMon
+
 QT += gui widgets
+
+
+VERSION = 0.4.0
+DEFINES += APP_VERSION=\"\\\"$${VERSION}\\\"\" \
+
+
 #INCLUDEPATH += .
 
 CONFIG += app
@@ -27,7 +34,8 @@ HEADERS += WinPcapFns.h \
     GUI/MainWindow.h \
     GUI/MasterWindow.h \
     GUI/Scope.h \
-    IO/ReadWriteFile.h
+    IO/ReadWriteFile.h \
+    version.h
 
 
 SOURCES += main.cpp \
@@ -39,4 +47,9 @@ SOURCES += main.cpp \
     GUI/MasterWindow.cpp \
     GUI/Scope.cpp \
     IO/ReadWriteFile.cpp
+
+DISTFILES += \
+    Readme.txt \
+    GFX/icon/QtNetworkMon.png \
+    QtNetworkMon.desktop
 

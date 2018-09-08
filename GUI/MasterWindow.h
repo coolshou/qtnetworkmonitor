@@ -36,9 +36,9 @@ class MasterWindow : public QMainWindow
         MainWindow * widgetMainWindow;
 
         //Menu
-        QMenu       *   showMenu;
-        QAction     *   ShowHideConsoleAct;
-
+        QMenu       * showMenu;
+        QAction     * ShowHideConsoleAct;
+        QAction     * AboutAct;
         //Tray
         QComboBox * iconComboBox;
         QSystemTrayIcon *trayIcon;

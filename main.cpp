@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QApplication::setApplicationName("qtnetworkmonitor");
     QApplication::setOrganizationName("coolshou.idv");
+    QApplication::setApplicationVersion(APP_VERSION);
 
     MasterWindow MasterWin;
     MasterWin.show();
