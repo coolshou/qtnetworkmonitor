@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="QtNetworkMon" />
+		<Option makefile_is_custom="1" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output=".\release\QtNetworkMon.exe" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<MakeCommands>
+					<Build command="$make -f $makefile $target" />
+					<CompileFile command="$make -f $makefile $file" />
+					<Clean command="$make -f $makefile clean" />
+					<DistClean command="$make -f $makefile clean" />
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-g" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="GUI\Console.cpp" />
+		<Unit filename="GUI\Console.h" />
+		<Unit filename="GUI\MainWindow.cpp" />
+		<Unit filename="GUI\MainWindow.h" />
+		<Unit filename="GUI\MasterWindow.cpp" />
+		<Unit filename="GUI\MasterWindow.h" />
+		<Unit filename="GUI\Scope.cpp" />
+		<Unit filename="GUI\Scope.h" />
+		<Unit filename="IO\ReadWriteFile.cpp" />
+		<Unit filename="IO\ReadWriteFile.h" />
+		<Unit filename="Misc.cpp" />
+		<Unit filename="Misc.h" />
+		<Unit filename="Notes.txt" />
+		<Unit filename="QtNetworkMon.pro" />
+		<Unit filename="Readme.txt" />
+		<Unit filename="Ressources.qrc" />
+		<Unit filename="ThreadListener.cpp" />
+		<Unit filename="ThreadListener.h" />
+		<Unit filename="WinPcapFns.cpp" />
+		<Unit filename="WinPcapFns.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="setIcon.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

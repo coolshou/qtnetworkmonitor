@@ -1,0 +1,19 @@
+To do:
+    -Load GUI options from config file
+    -Harmonize comments with Doxygen
+    -Check if it is worth using the UI builder
+    -Scope colors
+    -Memory leaks
+    -Scope: Have the different data match strings
+    -Show/Hide parts of the widget (console and device select)
+
+    -Keep a different history for different devices
+    -Keep an history of the data downloaded (last day/week/month/year) -> XML, HTML?
+    -Show/hide: store in a file the status of the GUI
+
+Bugs:
+    - ...
+
+New in version 0.3:
+    - Bugfixes
+    - Mainwindow menu --> Show/Hide

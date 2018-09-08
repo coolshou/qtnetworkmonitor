@@ -1,0 +1,1 @@
+c:\mingw\bin\mingw32-g++ pyC.cpp -o pyC -I C:\david\app\Python25\include -L C:\david\app\Python25\libs -lpython25
