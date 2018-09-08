@@ -46,11 +46,11 @@ string InfoReadWrite::find_subs_between(string mess_in,string left, string right
 	//extracting posx:
 	string Spos="";
 
-	unsigned int loc_1 = mess_in.find( left, 0 );
-
+    //unsigned int loc_1 = mess_in.find( left, 0 );
+    size_t loc_1 = mess_in.find( left, 0 );
    	if( loc_1 != string::npos ){
-		unsigned int loc_2 = mess_in.find( right, loc_1+1 );
-
+        //unsigned int loc_2 = mess_in.find( right, loc_1+1 );
+        size_t loc_2 = mess_in.find( right, loc_1+1 );
 		if( loc_2 != string::npos ){
 			Spos = mess_in.substr(loc_1 + left.size(), loc_2-loc_1 - left.size());
 		}else{
