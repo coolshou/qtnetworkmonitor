@@ -37,21 +37,30 @@ void MasterWindow::buildTray()
 
 void MasterWindow::buildMenu()
 {
-    //Menu
+    //Action
     ShowHideConsoleAct = new QAction(tr("&Show/Hide"), this);
     ShowHideConsoleAct->setStatusTip(tr("Show/Hide Console"));
     connect(ShowHideConsoleAct, SIGNAL(triggered()), widgetMainWindow, SLOT(toggleConsoleView()));
-    optionAct = new QAction(tr("&Config"), this);
-    optionAct->setStatusTip(tr("Option config"));
+    ClearConsoleAct = new QAction(tr("&Clear"), this);
+    ClearConsoleAct->setStatusTip(tr("Clear Console"));
+    connect(ClearConsoleAct, SIGNAL(triggered()), widgetMainWindow, SLOT(clearConsoleView()));
+
+    OptionAct = new QAction(tr("&Config"), this);
+    OptionAct->setStatusTip(tr("Option config"));
     //TODO: optin act connect
+
     AboutAct = new QAction(tr("&About"), this);
     AboutAct->setStatusTip(tr("About"));
     connect(AboutAct, SIGNAL(triggered()), widgetMainWindow, SLOT(showAbout()));
 
+    //menu
     showMenu = menuBar()->addMenu(tr("&Console"));
     showMenu->addAction(ShowHideConsoleAct);
+    showMenu->addAction(ClearConsoleAct);
+
     optionMenu = menuBar()->addMenu(tr("&Option"));
-    optionMenu->addAction(optionAct);
+    optionMenu->addAction(OptionAct);
+
     AboutMenu = menuBar()->addMenu(tr("&Help"));
     AboutMenu->addAction(AboutAct);
 }
@@ -80,4 +89,5 @@ void MasterWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     default:;
     }
 }
+
 

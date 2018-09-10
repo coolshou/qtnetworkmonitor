@@ -40,7 +40,8 @@ class MasterWindow : public QMainWindow
         QMenu       * optionMenu;
         QMenu       * AboutMenu;
         QAction     * ShowHideConsoleAct;
-        QAction     * optionAct;
+        QAction     * ClearConsoleAct;
+        QAction     * OptionAct;
         QAction     * AboutAct;
         //Tray
         QComboBox * iconComboBox;
@@ -54,3 +55,4 @@ class MasterWindow : public QMainWindow
 
 };
 #endif
+

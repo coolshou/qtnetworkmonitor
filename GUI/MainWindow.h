@@ -70,6 +70,7 @@ class MainWindow : public QWidget
 
        //!Shows/Hide the console
        void toggleConsoleView();
+       void clearConsoleView();
        void showAbout();
 
     private:

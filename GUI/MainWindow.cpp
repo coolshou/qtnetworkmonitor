@@ -179,6 +179,10 @@ void MainWindow::toggleConsoleView()
     else
         Console->show();
 }
+void MainWindow::clearConsoleView()
+{
+    Console->clear();
+}
 void MainWindow::showAbout()
 {
 //TODO showAbout
