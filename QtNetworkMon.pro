@@ -35,7 +35,7 @@ HEADERS += WinPcapFns.h \
     GUI/MasterWindow.h \
     GUI/Scope.h \
     IO/ReadWriteFile.h \
-    version.h
+    const.h
 
 
 SOURCES += main.cpp \

@@ -6,6 +6,8 @@
 #endif
 #include <QFile>
 #include <QDir>
+#include <QMessageBox>
+
 
 MainWindow::MainWindow()
 {
@@ -168,7 +170,8 @@ void MainWindow::About()
     cout<<"Opening a browser at the project's website."<<endl;
 
     QDesktopServices QDS;
-    QUrl ProjectWebsite(QString("https://github.com/coolshou/qtnetworkmonitor.git"));
+    //QUrl ProjectWebsite(QString("https://github.com/coolshou/qtnetworkmonitor.git"));
+    QUrl ProjectWebsite(WEBURL);
     QDS.openUrl( ProjectWebsite );
 }
 
@@ -185,7 +188,11 @@ void MainWindow::clearConsoleView()
 }
 void MainWindow::showAbout()
 {
-//TODO showAbout
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(tr("About"));
+    msgBox.setText(QString("A Free, Open Source, Portable (Windows, Unix / Linux) Network Monitor. \n<a href='%1'>visit website</a>").arg(WEBURL));
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
 }
 int MainWindow::OpenDevice(int DeviceNO)
 {
