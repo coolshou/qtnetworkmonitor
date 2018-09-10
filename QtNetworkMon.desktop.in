@@ -1,6 +1,6 @@
 [Desktop Entry]
 Categories=System
-Exec=QtNetworkMon
+Exec=%SUDO% QtNetworkMon
 GenericName[en_US]=QtNetworkMon
 GenericName=QtNetworkMon
 Icon=QtNetworkMon.png
