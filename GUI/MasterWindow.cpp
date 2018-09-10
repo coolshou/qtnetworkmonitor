@@ -4,6 +4,8 @@
 MasterWindow::MasterWindow()
 {
     setWindowTitle(tr("Qt Network Monitor v%1").arg(qApp->applicationVersion()));
+    setWindowIcon(QIcon(":/GFX/systray/TrayIconNormal.png"));
+
     resize(520, 340);
 
     widgetMainWindow = new MainWindow();
@@ -16,8 +18,6 @@ MasterWindow::MasterWindow()
 void MasterWindow::buildTray()
 {
     //Tray
-    setWindowIcon(QIcon(":/GFX/systray/trash.svg"));
-
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
@@ -38,15 +38,22 @@ void MasterWindow::buildTray()
 void MasterWindow::buildMenu()
 {
     //Menu
-    ShowHideConsoleAct = new QAction(tr("&Console"), this);
+    ShowHideConsoleAct = new QAction(tr("&Show/Hide"), this);
     ShowHideConsoleAct->setStatusTip(tr("Show/Hide Console"));
     connect(ShowHideConsoleAct, SIGNAL(triggered()), widgetMainWindow, SLOT(toggleConsoleView()));
-    AboutAct = new QAction(tr("&Console"), this);
+    optionAct = new QAction(tr("&Config"), this);
+    optionAct->setStatusTip(tr("Option config"));
+    //TODO: optin act connect
+    AboutAct = new QAction(tr("&About"), this);
     AboutAct->setStatusTip(tr("About"));
     connect(AboutAct, SIGNAL(triggered()), widgetMainWindow, SLOT(showAbout()));
 
-    showMenu = menuBar()->addMenu(tr("&Show/Hide"));
+    showMenu = menuBar()->addMenu(tr("&Console"));
     showMenu->addAction(ShowHideConsoleAct);
+    optionMenu = menuBar()->addMenu(tr("&Option"));
+    optionMenu->addAction(optionAct);
+    AboutMenu = menuBar()->addMenu(tr("&Help"));
+    AboutMenu->addAction(AboutAct);
 }
 
 
