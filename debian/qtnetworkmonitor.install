@@ -1,0 +1,3 @@
+QtNetworkMon /usr/bin
+QtNetworkMon.desktop /usr/share/applications/
+GFX/icon/QtNetworkMon.png /usr/share/pixmaps
