@@ -25,28 +25,28 @@
 			<Add option="-g" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="GUI\Console.cpp" />
-		<Unit filename="GUI\Console.h" />
-		<Unit filename="GUI\MainWindow.cpp" />
-		<Unit filename="GUI\MainWindow.h" />
-		<Unit filename="GUI\MasterWindow.cpp" />
-		<Unit filename="GUI\MasterWindow.h" />
-		<Unit filename="GUI\Scope.cpp" />
-		<Unit filename="GUI\Scope.h" />
-		<Unit filename="IO\ReadWriteFile.cpp" />
-		<Unit filename="IO\ReadWriteFile.h" />
-		<Unit filename="Misc.cpp" />
-		<Unit filename="Misc.h" />
+		<Unit filename="src\GUI\Console.cpp" />
+		<Unit filename="src\GUI\Console.h" />
+		<Unit filename="src\GUI\MainWindow.cpp" />
+		<Unit filename="src\GUI\MainWindow.h" />
+		<Unit filename="src\GUI\MasterWindow.cpp" />
+		<Unit filename="src\GUI\MasterWindow.h" />
+		<Unit filename="src\GUI\Scope.cpp" />
+		<Unit filename="src\GUI\Scope.h" />
+		<Unit filename="src\IO\ReadWriteFile.cpp" />
+		<Unit filename="src\IO\ReadWriteFile.h" />
+		<Unit filename="src\Misc.cpp" />
+		<Unit filename="src\Misc.h" />
 		<Unit filename="Notes.txt" />
 		<Unit filename="QtNetworkMon.pro" />
 		<Unit filename="Readme.txt" />
-		<Unit filename="Ressources.qrc" />
-		<Unit filename="ThreadListener.cpp" />
-		<Unit filename="ThreadListener.h" />
-		<Unit filename="WinPcapFns.cpp" />
-		<Unit filename="WinPcapFns.h" />
-		<Unit filename="main.cpp" />
-		<Unit filename="setIcon.rc">
+		<Unit filename="src\Ressources.qrc" />
+		<Unit filename="src\ThreadListener.cpp" />
+		<Unit filename="src\ThreadListener.h" />
+		<Unit filename="src\WinPcapFns.cpp" />
+		<Unit filename="src\WinPcapFns.h" />
+		<Unit filename="src\main.cpp" />
+		<Unit filename="src\setIcon.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
 		<Extensions>

@@ -55,7 +55,7 @@ DISTFILES += \
 
 unix{
     DISTFILES += \
-        GFX/icon/QtNetworkMon.png \
+        src/GFX/icon/QtNetworkMon.png \
         QtNetworkMon.desktop \
 }
 
