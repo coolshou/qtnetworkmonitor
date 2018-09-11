@@ -7,6 +7,10 @@
 #include <sstream>
 #include <assert.h>
 
+#include <stdio.h>
+#include <string.h>
+#include "utlist.h"
+
 //Unix
 #include "pcap.h"
 
@@ -21,6 +25,12 @@
 
 using namespace std;
 
+#define IPV4LEN 20
+typedef struct ipv4adds {
+    char addr[IPV4LEN];
+    struct ipv4adds *next, *prev;
+} ipv4adds;
+
 /*!
 Contains the description of the Pcap device and all the functions
 that wrap around the WinPcap lib to get stats on the network traffic.
@@ -33,7 +43,7 @@ class PcapHandler
 
         //!Constructor
         PcapHandler();
-
+        ~PcapHandler();
         //!Prints the messages queued
         void Print_messages();
 
@@ -74,6 +84,7 @@ class PcapHandler
         */
         int CheckIfCurrDeviceReady();
 
+        void clearIPv4Addr();
         /*!
         Gets the device's IP on the subnet
         */
@@ -123,6 +134,7 @@ class PcapHandler
 
         //!The ip address of the current device
         string IPadd;
+        ipv4adds *head = NULL; /* important- initialize to NULL! */
 
         //!True if it has been instructed to return (useful for threads, avoid infinite loops).
         bool stopInstructed;

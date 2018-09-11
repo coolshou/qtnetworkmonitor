@@ -8,7 +8,10 @@ PcapHandler::PcapHandler()
     DeviceReady = 0;
     stopInstructed = false;
 }
-
+PcapHandler::~PcapHandler()
+{
+    clearIPv4Addr();
+}
 void PcapHandler::Print_messages()
 {
     for (unsigned int x=0; x<messages.size(); x++)
@@ -149,9 +152,19 @@ char *iptos(u_long in)
 	sprintf(output[which], "%d.%d.%d.%d", p[0], p[1], p[2], p[3]);
 	return output[which];
 }
+void PcapHandler::clearIPv4Addr(){
+    ipv4adds *elt;
+    ipv4adds *tmp;
 
+    DL_FOREACH_SAFE(head,elt,tmp) {
+        DL_DELETE(head,elt);
+        free(elt);
+    }
+}
 string PcapHandler::getDeviceIP(int DeviceNo)
 {
+    ipv4adds *name;
+
     pcap_if_t *Adev;
     int it=0;
     assert(DeviceNo>0);
@@ -163,6 +176,8 @@ string PcapHandler::getDeviceIP(int DeviceNo)
 
         it++;
     }
+    //remove all elm in ipv4adds
+    clearIPv4Addr();
 
     pcap_addr_t *a;
 
@@ -176,6 +191,12 @@ string PcapHandler::getDeviceIP(int DeviceNo)
             {
               IPa = iptos(((struct sockaddr_in *)a->addr)->sin_addr.s_addr);
               messages.push_back("Device's IP address successfully grabbed, IP = "+IPa);
+              //
+              if (IPa!=""){
+                name = (ipv4adds *)malloc(sizeof *name);
+                strcpy(name->addr, IPa.data());
+                LL_APPEND(head, name);
+              }
             break;
             }
 
@@ -194,6 +215,9 @@ string PcapHandler::getDeviceIP(int DeviceNo)
     if (IPa=="")
         IPa = "ERROR";
 
+    //ipv4adds *elt;
+    //LL_FOREACH(head,elt) printf("%s\n", elt->addr);
+
     IPadd = IPa;
     return IPa;
 }
@@ -209,6 +233,7 @@ int PcapHandler::StartListenOnDevice_countData()
 
     //To retreive the source and dest. ips
     ip_header *ih;
+    ipv4adds *elt;
 
     while(((res = pcap_next_ex( adhandle, &header, &pkt_data)) >= 0) && !stopInstructed ){
 
@@ -232,11 +257,19 @@ int PcapHandler::StartListenOnDevice_countData()
                                             ih->daddr.byte4
                                         );
 
+        DL_FOREACH(head,elt){
+            if (dest_IP == elt->addr)
+                set_TotalDataDownloaded_bytes (get_TotalDataDownloaded_bytes() + header->len);
+            if (source_IP == elt->addr)
+                set_TotalDataUploaded_bytes (get_TotalDataUploaded_bytes() + header->len);
+        }
+        /*
         if (dest_IP == IPadd)
             set_TotalDataDownloaded_bytes (get_TotalDataDownloaded_bytes() + header->len);
 
         if (source_IP == IPadd)
             set_TotalDataUploaded_bytes (get_TotalDataUploaded_bytes() + header->len);
+        */
     }
 
     stopInstructed = false;

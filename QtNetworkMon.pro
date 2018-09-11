@@ -10,6 +10,8 @@ DEFINES += APP_VERSION=\"\\\"$${VERSION}\\\"\" \
 
 #INCLUDEPATH += .
 
+INCLUDEPATH += ./uthash/include
+
 CONFIG += app
 
 RESOURCES = Ressources.qrc

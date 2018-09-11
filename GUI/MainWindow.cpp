@@ -274,9 +274,9 @@ string MainWindow::getUnits(float nBits)
     if ( nBits < 1000.0*1000.0 )
         return "kB";
     if ( nBits < 1000.0*1000.0*1000.0 )
-        return "Mb";
+        return "MB";
     else
-        return "Gb";
+        return "GB";
 }
 
 float MainWindow::getDivisor(float nBits)
