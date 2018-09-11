@@ -17,13 +17,13 @@ for the latest version.
     1. Install WinPcap. (An installation file should be in the same directory as QtNetMon was installed, 'WinPcap_4_0.exe')
         If not, go to: http://www.winpcap.org/install/default.htm and download WinPcap 4.0.
 
-    2. Double click on the binary file (QtNetworkMonitor.exe)
+    2. Double click on the binary file (QtNetworkMon.exe)
 
 #Linux installation:
 
     1. Insall libpcap (sudo apt-get install libpcap)
 
-    2. Run the binary file (sudo ./QtNetworkMonitor) from the program's directory.
+    2. Run the binary file (sudo ./QtNetworkMon) from the program's directory.
     It HAS to be run in super-user mode.
 
 #Version history:
