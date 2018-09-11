@@ -8,6 +8,7 @@
 #include <QMenu>
 #include <QComboBox>
 #include <QMenuBar>
+#include <QSettings>
 
 #include "MainWindow.h"
 
@@ -27,12 +28,14 @@ class MasterWindow : public QMainWindow
 
         //!What to do when the 'X' is clicked
         void closeEvent(QCloseEvent *event);
+        void appClose();
 
     private:
-
+        void saveSetting();
+        void loadSetting();
         void buildMenu();
         void buildTray();
-
+        QSettings  * setting;
         MainWindow * widgetMainWindow;
 
         //Menu

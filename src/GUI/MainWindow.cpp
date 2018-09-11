@@ -31,6 +31,10 @@ MainWindow::MainWindow()
     if (! path.exists(StatsFile)) {
         qDebug() << "file not exist: " << StatsFile;
     }
+    //TODO: settings
+    setting= new QSettings(this);
+    loadSetting();
+
     //Members inits:
     LastAmountData_download = 0;
     LastAmountData_upload = 0;
@@ -55,7 +59,20 @@ MainWindow::MainWindow()
 
     StartCapture();
 }
-
+void  MainWindow::loadSetting()
+{
+    //TODO: loadSetting
+    //setting->beginGroup("MainWindow");
+    //this->setGeometry(setting->value("geometry", QRect(0,0, 520, 500)).toRect());
+    //setting->endGroup();
+}
+void  MainWindow::saveSetting()
+{
+    //TODO: saveSetting
+    //setting->beginGroup("MainWindow");
+    //setting->setValue("geometry", this->window()->geometry());
+    //setting->endGroup();
+}
 void  MainWindow::setupGUI()
 {
 

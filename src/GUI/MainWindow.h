@@ -18,7 +18,7 @@
 #include <QtGui>
 #include <QDesktopServices>
 #include <QColor>
-
+#include <QSettings>
 
 #include "../WinPcapFns.h"
 #include "../ThreadListener.h"
@@ -50,6 +50,8 @@ class MainWindow : public QWidget
         //!Starts capturing packets
         //!Has to be run from inside a thread (or will block the app)
         int StartCapture();
+        void saveSetting();
+        void loadSetting();
 
     protected:
        //void paintEvent(QPaintEvent *event);
@@ -78,6 +80,7 @@ class MainWindow : public QWidget
     private:
         QString homePath;
         QString StatsFile;
+        QSettings *setting;
 
         //GUI fns
         void setupGUI();

@@ -5,8 +5,9 @@ MasterWindow::MasterWindow()
 {
     setWindowTitle(tr("Qt Network Monitor v%1").arg(qApp->applicationVersion()));
     setWindowIcon(QIcon(":/GFX/systray/TrayIconNormal.png"));
-
-    resize(520, 340);
+    setting= new QSettings(this);
+    loadSetting();
+    //resize(520, 340);
 
     widgetMainWindow = new MainWindow();
     setCentralWidget(widgetMainWindow);
@@ -19,7 +20,7 @@ void MasterWindow::buildTray()
 {
     //Tray
     quitAction = new QAction(tr("&Quit"), this);
-    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(quitAction, SIGNAL(triggered()), this, SLOT(appClose()));
 
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon((QIcon(":/GFX/systray/TrayIconNormal.png")));
@@ -29,7 +30,7 @@ void MasterWindow::buildTray()
     trayIconMenu->addAction(quitAction);
 
     trayIcon->setContextMenu(trayIconMenu);
-    //trayIcon->setVisible(true);
+    trayIcon->setVisible(true);
 
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason) ),
              this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)) );
@@ -72,8 +73,8 @@ void MasterWindow::closeEvent(QCloseEvent *event)
 
     if (trayIcon->isVisible())
     {
-    hide();
-    event->ignore();
+        hide();
+        event->ignore();
     }
 }
 
@@ -83,11 +84,33 @@ void MasterWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     {
     case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::DoubleClick:
-    //trayIcon->setVisible(false);
-    show();
+        //trayIcon->setVisible(false);
+        show();
 
     default:;
     }
 }
+void MasterWindow::appClose()
+{
+    this->saveSetting();
+    trayIcon->setVisible(false);
+    qApp->exit(0);
+    //qApp->quit();
+}
 
-
+void  MasterWindow::loadSetting()
+{
+    //TODO: loadSetting
+    widgetMainWindow->loadSetting();
+    setting->beginGroup("MainWindow");
+    this->setGeometry(setting->value("geometry", QRect(0,0, 520, 500)).toRect());
+    setting->endGroup();
+}
+void  MasterWindow::saveSetting()
+{
+    widgetMainWindow->saveSetting();
+    //TODO: saveSetting
+    setting->beginGroup("MainWindow");
+    setting->setValue("geometry", this->window()->geometry());
+    setting->endGroup();
+}
