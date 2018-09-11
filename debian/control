@@ -2,7 +2,8 @@ Source: qtnetworkmonitor
 Section: system
 Priority: optional
 Maintainer: jimmy <jimmy@jimmy-alpha>
-Build-Depends: debhelper (>= 10), qtbase5-dev, libpcap0.8-dev, libpng-dev, libicu-dev, libxcb1-dev, sed
+Build-Depends: debhelper (>= 10), qtbase5-dev, libpcap0.8-dev, libpng-dev, libicu-dev, libxcb1-dev, sed,
+    lxqt-sudo | gksu | kdesudo
 Standards-Version: 4.1.2
 Homepage: https://github.com/coolshou/qtnetworkmonitor
 #Vcs-Git: https://anonscm.debian.org/git/collab-maint/qtnetworkmonitor.git
