@@ -110,6 +110,7 @@ void  MainWindow::setupGUI()
 
     //Console
     Console = new QConsole(this);
+    Console->hide();
 
     //Speed Scope
     dataScope = new Scope(this);
@@ -171,7 +172,7 @@ void MainWindow::clearConsoleView()
 }
 void MainWindow::showAbout()
 {
-    QMessageBox msgBox;
+    QMessageBox msgBox(this);
     msgBox.setIcon(QMessageBox::Information);
     msgBox.setWindowTitle(tr("About"));
     msgBox.setTextFormat(Qt::RichText);   //this is what makes the links clickable
