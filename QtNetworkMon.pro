@@ -9,19 +9,19 @@ DEFINES += APP_VERSION=\"\\\"$${VERSION}\\\"\" \
 
 
 INCLUDEPATH += .
-
+INCLUDEPATH += ./src
 INCLUDEPATH += ./uthash/include
 
 CONFIG += app
 
-RESOURCES = Ressources.qrc
+RESOURCES = src/Ressources.qrc
 
 win32{
     INCLUDEPATH += ./Wdp/include
     LIBS += -L ./Wdp/lib -lwpcap
 
     #For the win32 icon
-    RC_FILE = setIcon.rc
+    RC_FILE = src/setIcon.rc
 }
 
 unix{
@@ -29,25 +29,26 @@ unix{
 }
 
 # Input
-HEADERS += WinPcapFns.h \
-           Misc.h \
-           ThreadListener.h \
-    GUI/Console.h \
-    GUI/MainWindow.h \
-    GUI/MasterWindow.h \
-    GUI/Scope.h \
-    IO/ReadWriteFile.h \
-    const.h
+HEADERS += src/WinPcapFns.h \
+           src/Misc.h \
+           src/ThreadListener.h \
+    src/const.h \
+    src/GUI/Console.h \
+    src/GUI/MainWindow.h \
+    src/GUI/MasterWindow.h \
+    src/GUI/Scope.h \
+    src/IO/ReadWriteFile.h
 
-SOURCES += main.cpp \
-           ThreadListener.cpp \
-           Misc.cpp \
-           WinPcapFns.cpp \
-    GUI/Console.cpp \
-    GUI/MainWindow.cpp \
-    GUI/MasterWindow.cpp \
-    GUI/Scope.cpp \
-    IO/ReadWriteFile.cpp
+
+SOURCES += src/main.cpp \
+           src/ThreadListener.cpp \
+           src/Misc.cpp \
+           src/WinPcapFns.cpp \
+    src/GUI/Console.cpp \
+    src/GUI/MainWindow.cpp \
+    src/GUI/MasterWindow.cpp \
+    src/GUI/Scope.cpp \
+    src/IO/ReadWriteFile.cpp
 
 DISTFILES += \
     Readme.txt
@@ -58,7 +59,3 @@ unix{
         QtNetworkMon.desktop \
 }
 
-win32{
-    DISTFILES += \
-        setIcon.rc
-}

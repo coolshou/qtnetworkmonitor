@@ -114,22 +114,6 @@ void  MainWindow::setupGUI()
     //Speed Scope
     dataScope = new Scope(this);
 
-    //About
-    /*
-    AboutWebsite = new QPushButton("Click here to visit the project's website");
-    AboutWebsite->setMaximumSize(QSize(600, 18));
-    AboutWebsite->setFlat(true);
-
-        //Color Palette
-        QPalette QBluePalette;
-        QBrush BlueBrush(QColor(0, 59, 255, 255));
-        BlueBrush.setStyle(Qt::SolidPattern);
-        QBluePalette.setBrush(QPalette::Active, QPalette::ButtonText, BlueBrush);
-
-    AboutWebsite->setPalette(QBluePalette);
-
-    connect( AboutWebsite, SIGNAL( clicked() ), this, SLOT(About()) );
-    */
     {//Sets-up the layout
         QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -170,7 +154,6 @@ void MainWindow::About()
     cout<<"Opening a browser at the project's website."<<endl;
 
     QDesktopServices QDS;
-    //QUrl ProjectWebsite(QString("https://github.com/coolshou/qtnetworkmonitor.git"));
     QUrl ProjectWebsite(WEBURL);
     QDS.openUrl( ProjectWebsite );
 }
@@ -189,8 +172,10 @@ void MainWindow::clearConsoleView()
 void MainWindow::showAbout()
 {
     QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Information);
     msgBox.setWindowTitle(tr("About"));
-    msgBox.setText(QString("A Free, Open Source, Portable (Windows, Unix / Linux) Network Monitor. \n<a href='%1'>visit website</a>").arg(WEBURL));
+    msgBox.setTextFormat(Qt::RichText);   //this is what makes the links clickable
+    msgBox.setText(QString("A Free, Open Source, Portable (Windows, Unix / Linux) Network Monitor. \n <a href=\"%1\">visit website</a>").arg(WEBURL));
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.exec();
 }
