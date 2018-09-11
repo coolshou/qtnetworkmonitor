@@ -191,7 +191,7 @@ string PcapHandler::getDeviceIP(int DeviceNo)
             {
               IPa = iptos(((struct sockaddr_in *)a->addr)->sin_addr.s_addr);
               messages.push_back("Device's IP address successfully grabbed, IP = "+IPa);
-              //
+              //multi ip on same device
               if (IPa!=""){
                 name = (ipv4adds *)malloc(sizeof *name);
                 strcpy(name->addr, IPa.data());

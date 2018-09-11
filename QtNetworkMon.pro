@@ -8,7 +8,7 @@ VERSION = 0.4.0
 DEFINES += APP_VERSION=\"\\\"$${VERSION}\\\"\" \
 
 
-#INCLUDEPATH += .
+INCLUDEPATH += .
 
 INCLUDEPATH += ./uthash/include
 
@@ -39,7 +39,6 @@ HEADERS += WinPcapFns.h \
     IO/ReadWriteFile.h \
     const.h
 
-
 SOURCES += main.cpp \
            ThreadListener.cpp \
            Misc.cpp \
@@ -51,7 +50,15 @@ SOURCES += main.cpp \
     IO/ReadWriteFile.cpp
 
 DISTFILES += \
-    Readme.txt \
-    GFX/icon/QtNetworkMon.png \
-    QtNetworkMon.desktop
+    Readme.txt
 
+unix{
+    DISTFILES += \
+        GFX/icon/QtNetworkMon.png \
+        QtNetworkMon.desktop \
+}
+
+win32{
+    DISTFILES += \
+        setIcon.rc
+}
