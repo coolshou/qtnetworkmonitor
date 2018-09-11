@@ -156,8 +156,8 @@ void PcapHandler::clearIPv4Addr(){
     ipv4adds *elt;
     ipv4adds *tmp;
 
-    DL_FOREACH_SAFE(head,elt,tmp) {
-        DL_DELETE(head,elt);
+    LL_FOREACH_SAFE(head,elt,tmp) {
+        LL_DELETE(head,elt);
         free(elt);
     }
 }
