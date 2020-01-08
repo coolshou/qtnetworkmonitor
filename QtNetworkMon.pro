@@ -10,7 +10,7 @@ DEFINES += APP_VERSION=\"\\\"$${VERSION}\\\"\" \
 
 INCLUDEPATH += .
 INCLUDEPATH += ./src
-INCLUDEPATH += ./uthash/include
+# INCLUDEPATH += ./uthash/include
 
 CONFIG += app
 
