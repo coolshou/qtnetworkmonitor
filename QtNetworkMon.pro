@@ -17,8 +17,16 @@ CONFIG += app
 RESOURCES = src/Ressources.qrc
 
 win32{
-    INCLUDEPATH += ./Wdp/include
-    LIBS += -L ./Wdp/lib -lwpcap
+    # Winpcap
+    #INCLUDEPATH += ./Wdp/include
+    #LIBS += -L ./Wdp/lib -lwpcap
+    # npcap for Win10
+    INCLUDEPATH += "$$PWD/npcap/Include"
+    contains(QT_ARCH, i386) {
+        LIBS += -L "$$PWD/npcap/Lib" -lwpcap
+    } else {
+        LIBS += -L "$$PWD/npcap/Lib/x64" -lwpcap
+    }
 
     #For the win32 icon
     RC_FILE = src/setIcon.rc
