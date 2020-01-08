@@ -3,10 +3,16 @@ TARGET = QtNetworkMon
 
 QT += gui widgets
 
+MAJOR = 0
+MINOR = 4
+BUILD = 0
+PATCH = 0
+COMPANYNAME = "coolshou.idv"
+PRODUCTDESCRIPTION = "Qt Network Monitor is a KISS network monitor that monitors how much bandwidth is being used on a daily basis"
+VERSION = $${MAJOR}.$${MINOR}.$${BUILD}.$${PATCH}
+VERSION_FILE = "$${MAJOR},$${MINOR},$${BUILD},$${PATCH}"
 
-VERSION = 0.4.0
 DEFINES += APP_VERSION=\"\\\"$${VERSION}\\\"\" \
-
 
 INCLUDEPATH += .
 INCLUDEPATH += ./src
@@ -17,6 +23,9 @@ CONFIG += app
 RESOURCES = src/Ressources.qrc
 
 win32{
+    QMAKE_SUBSTITUTES += ver_conf
+    ver_conf.input = $$PWD/src/version.h.in
+    ver_conf.output  = $$PWD/src/version.h
     # Winpcap
     #INCLUDEPATH += ./Wdp/include
     #LIBS += -L ./Wdp/lib -lwpcap
@@ -33,6 +42,7 @@ win32{
 }
 
 unix{
+    QMAKE_SUBSTITUTES += $$PWD/src/version.h.in
     LIBS += -L ./usr/lib -lpcap
 }
 
@@ -45,7 +55,8 @@ HEADERS += src/WinPcapFns.h \
     src/GUI/MainWindow.h \
     src/GUI/MasterWindow.h \
     src/GUI/Scope.h \
-    src/IO/ReadWriteFile.h
+    src/IO/ReadWriteFile.h \
+    src/version.h.in
 
 
 SOURCES += src/main.cpp \
@@ -59,7 +70,8 @@ SOURCES += src/main.cpp \
     src/IO/ReadWriteFile.cpp
 
 DISTFILES += \
-    Readme.txt
+    Readme.txt \
+    src/setIcon.rc
 
 unix{
     DISTFILES += \
