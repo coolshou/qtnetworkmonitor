@@ -15,8 +15,7 @@ VERSION_FILE = "$${MAJOR},$${MINOR},$${BUILD},$${PATCH}"
 DEFINES += APP_VERSION=\"\\\"$${VERSION}\\\"\" \
 
 INCLUDEPATH += .
-INCLUDEPATH += ./src
-# INCLUDEPATH += ./uthash/include
+INCLUDEPATH += ./include
 
 CONFIG += app
 
