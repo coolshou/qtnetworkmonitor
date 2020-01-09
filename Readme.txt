@@ -36,3 +36,7 @@ for the latest version.
 
     v 0.1: (10 May 2007)
         Initial beta release. Displays how much bandwidth a given device uses.
+
+
+# original auther
+    http://david-web.appspot.com/cnt/QtNetworkMonitor/
