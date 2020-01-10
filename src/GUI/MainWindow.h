@@ -24,9 +24,9 @@
 #include "../ThreadListener.h"
 #include "Scope.h"
 #include "Console.h"
-#include "const.h"
+#include "../const.h"
 
-#include "./IO/ReadWriteFile.h"
+#include "../IO/ReadWriteFile.h"
 
 #include <QDebug>
 

@@ -1,4 +1,5 @@
 IDI_ICON1   ICON    DISCARDABLE "./GFX/icon/appIcon.ico"
+1 24 "QtNetworkMon.manifest"
 
 #include <windows.h>
 #include "version.h"
