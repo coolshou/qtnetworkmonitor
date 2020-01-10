@@ -86,6 +86,7 @@ Section "main" SEC01
   SetOutPath "$INSTDIR"
   File "..\LICENSE.txt"
   File "..\Notes.txt"
+  File "..\dependencies\WinPcap_4_1_3.exe"
   
   ${If} ${RunningX64}
     File "..\bin\release\x64\QtNetworkMon.exe"
@@ -162,7 +163,40 @@ SectionEnd
 
 Section "winpcap" SEC02
   ; check winpcap
+  ; GetDllVersion "$SYSDIR\wpcap.dll" $R0 $R1
+  GetDllVersion "$SYSDIR\Packet.dll" $R0 $R1
+  IntOp $R2 $R0 / 0x00010000
+  IntOp $R3 $R0 & 0x0000FFFF
+  IntOp $R4 $R1 / 0x00010000
+  IntOp $R5 $R1 & 0x0000FFFF
+  StrCpy $0 "$R2.$R3.$R4.$R5"
   ; check winpcap ver
+  ${If} $R2 < 4
+    Goto install_winpcap
+  ${Else}
+    ${If} $R3 < 1
+      Goto install_winpcap
+    ${Else}
+      ${If} $R4 < 0
+        Goto install_winpcap
+      ${Else}
+        ${If} $R5 < 2980
+          Goto install_winpcap
+        ${Else}
+          Goto skip_install_winpcap
+        ${EndIf}
+      ${EndIf}
+    ${EndIf}
+  ${EndIf}
+
+install_winpcap:
+    SetDetailsPrint textonly
+    DetailPrint "Installing WinPcap 4.1.3..."
+    SetDetailsPrint none
+    ExecWait `"$INSTDIR\WinPcap_4_1_3.exe"` $R0
+
+skip_install_winpcap:
+
 SectionEnd
 
 Section -AdditionalIcons
@@ -220,6 +254,7 @@ Section Uninstall
   Delete "$INSTDIR\Qt5Svg.dll"
   Delete "$INSTDIR\Qt5Widgets.dll"
   Delete "$INSTDIR\QtNetworkMon.exe"
+  Delete "$INSTDIR\WinPcap_4_1_3.exe"
   Delete "$INSTDIR\iconengines\qsvgicon.dll"
   Delete "$INSTDIR\imageformats\qgif.dll"
   Delete "$INSTDIR\imageformats\qico.dll"
