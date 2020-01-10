@@ -46,6 +46,10 @@ CONFIG += app
 RESOURCES = src/Ressources.qrc
 
 win32{
+    QMAKE_SUBSTITUTES += ver_conf
+    ver_conf.input = $$PWD/src/version.h.in
+    ver_conf.output  = $$PWD/src/version.h
+
     contains(USE_WINPCAP, 1) {
         # Winpcap
         INCLUDEPATH += "$$PWD/Wdp/include"
@@ -75,6 +79,7 @@ win32{
 }
 
 unix{
+    QMAKE_SUBSTITUTES += $$PWD/src/version.h.in
     LIBS += -L ./usr/lib -lpcap
 }
 
