@@ -31,9 +31,7 @@ MainWindow::MainWindow()
     if (! path.exists(StatsFile)) {
         qDebug() << "file not exist: " << StatsFile;
     }
-    //TODO: settings
     setting= new QSettings(this);
-    loadSetting();
 
     //Members inits:
     LastAmountData_download = 0;
@@ -59,25 +57,17 @@ MainWindow::MainWindow()
 
     StartCapture();
 }
-void  MainWindow::loadSetting()
-{
-    //TODO: loadSetting
-    //setting->beginGroup("MainWindow");
-    //this->setGeometry(setting->value("geometry", QRect(0,0, 520, 500)).toRect());
-    //setting->endGroup();
-}
-void  MainWindow::saveSetting()
-{
-    //TODO: saveSetting
-    //setting->beginGroup("MainWindow");
-    //setting->setValue("geometry", this->window()->geometry());
-    //setting->endGroup();
-}
+
 void  MainWindow::setupGUI()
 {
 
 
     //-----------------Sets up the widgets---------------------------
+    DownloadStatus = new Status("Received:", this);
+
+    UploadStatus = new Status("Sent:", this);
+
+
     {//Up/Down Stats
         DownloadKBpS = new QLabel("0",this);
         UploadKBpS = new QLabel("0",this);
@@ -138,6 +128,8 @@ void  MainWindow::setupGUI()
         //mainLayout->addWidget(AboutWebsite, Qt::AlignBottom);
 
         mainLayout->addWidget(DropListDeviceGB);
+        mainLayout->addWidget(DownloadStatus);
+        mainLayout->addWidget(UploadStatus);
         mainLayout->addWidget(DownloadUploadGB);
 
         mainLayout->addWidget(dataScope, Qt::AlignCenter);
@@ -438,7 +430,22 @@ void MainWindow::SaveDataToFile()
     Writer.Write(StatsFile.toUtf8().constData());
 }
 
-void LoadOptionsFromFile(){cout<<"Not implemented yet."<<endl;}
+void MainWindow::LoadOptionsFromFile()
+{
+    cout<<"Not implemented yet."<<endl;
+    //TODO: loadSetting
+    //setting->beginGroup("MainWindow");
+    //this->setGeometry(setting->value("geometry", QRect(0,0, 520, 500)).toRect());
+    //setting->endGroup();
 
-void SaveOptionsToFile(){cout<<"Not implemented yet."<<endl;}
+}
+
+void MainWindow::SaveOptionsToFile()
+{
+    cout<<"Not implemented yet."<<endl;
+    //TODO: saveSetting
+    //setting->beginGroup("MainWindow");
+    //setting->setValue("geometry", this->window()->geometry());
+    //setting->endGroup();
+}
 

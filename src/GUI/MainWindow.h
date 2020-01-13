@@ -27,6 +27,7 @@
 #include "../const.h"
 
 #include "../IO/ReadWriteFile.h"
+#include "status.h"
 
 #include <QDebug>
 
@@ -50,8 +51,8 @@ class MainWindow : public QWidget
         //!Starts capturing packets
         //!Has to be run from inside a thread (or will block the app)
         int StartCapture();
-        void saveSetting();
-        void loadSetting();
+        void LoadOptionsFromFile();
+        void SaveOptionsToFile();
 
     protected:
        //void paintEvent(QPaintEvent *event);
@@ -90,9 +91,7 @@ class MainWindow : public QWidget
 
         //Load/Save
         void LoadDataFromFile();
-        void LoadOptionsFromFile();
         void SaveDataToFile();
-        void SaveOptionsToFile();
 
         //!Pcap wrapper
             PcapHandler PCHandler;
@@ -120,6 +119,9 @@ class MainWindow : public QWidget
             ThreadListener * ThreadL;
 
             //Display widgets:
+            Status * DownloadStatus;
+            Status * UploadStatus;
+
             QGroupBox   *   DownloadUploadGB;
 
             QPushButton *   AboutWebsite;
