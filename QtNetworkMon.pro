@@ -19,7 +19,7 @@ DEFINES += APP_VERSION=\"\\\"$${VERSION}\\\"\"
 DEFINES += APP_PRODUCTNAME=\"\\\"$${PRODUCTNAME}\\\"\"
 DEFINES += USE_WINPCAP=\"\\\"$${USE_WINPCAP}\\\"\"
 
-ParentDirectory = $$PWD\bin
+ParentDirectory = $$PWD/bin
 contains(QT_ARCH, i386) {
     ARCH=x86
 } else {
@@ -32,7 +32,7 @@ CONFIG(debug, debug|release) {
 }
 
 RCC_DIR = "$$ParentDirectory/Build/$$BUILD/$$ARCH/RCCFiles"
-UI_DIR = "$$ParentDirectory/Build/$$BUILD/$$ARCH/UICFiles"
+#UI_DIR = "$$ParentDirectory/Build/$$BUILD/$$ARCH/UICFiles"
 MOC_DIR = "$$ParentDirectory/Build/$$BUILD/$$ARCH/MOCFiles"
 OBJECTS_DIR = "$$ParentDirectory/Build/$$BUILD/$$ARCH/ObjFiles"
 
@@ -94,7 +94,8 @@ HEADERS += \
     src/GUI/MasterWindow.h \
     src/GUI/Scope.h \
     src/IO/ReadWriteFile.h \
-    src/version.h.in
+    src/version.h.in \
+    src/GUI/status.h
 
 
 SOURCES += \
@@ -106,7 +107,8 @@ SOURCES += \
     src/GUI/MainWindow.cpp \
     src/GUI/MasterWindow.cpp \
     src/GUI/Scope.cpp \
-    src/IO/ReadWriteFile.cpp
+    src/IO/ReadWriteFile.cpp \
+    src/GUI/status.cpp
 
 DISTFILES += \
     QtNetworkMon.manifest \
@@ -121,4 +123,7 @@ unix{
         src/GFX/icon/QtNetworkMon.png \
         QtNetworkMon.desktop \
 }
+
+FORMS += \
+    src/GUI/status.ui
 

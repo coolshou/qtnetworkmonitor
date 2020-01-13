@@ -101,14 +101,14 @@ void MasterWindow::appClose()
 void  MasterWindow::loadSetting()
 {
     //TODO: loadSetting
-    widgetMainWindow->loadSetting();
+    widgetMainWindow->LoadOptionsFromFile();
     setting->beginGroup("MainWindow");
     this->setGeometry(setting->value("geometry", QRect(0,0, 520, 500)).toRect());
     setting->endGroup();
 }
 void  MasterWindow::saveSetting()
 {
-    widgetMainWindow->saveSetting();
+    widgetMainWindow->SaveOptionsToFile();
     //TODO: saveSetting
     setting->beginGroup("MainWindow");
     setting->setValue("geometry", this->window()->geometry());
