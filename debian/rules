@@ -22,15 +22,15 @@
 # This is example for Cmake (See https://bugs.debian.org/641051 )
 #override_dh_auto_configure:
 #	dh_auto_configure -- #	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
-override_dh_auto_build:
+#override_dh_auto_build:
 	#desktop file, lxqt-sudo , gksudo, kdesudo
-	if [ -f "/usr/bin/lxqt-sudo" ]; then \
-		sed 's/%SUDO%/lxqt-sudo/g' QtNetworkMon.desktop.in > QtNetworkMon.desktop; \
-	elif [ -f "/usr/bin/gksudo" ]; then \
-		sed 's/%SUDO%/gksudo/g' QtNetworkMon.desktop.in > QtNetworkMon.desktop; \
-	elif [ -f "/usr/bin/kdesudo" ]; then \
-		sed 's/%SUDO%/kdesudo/g' QtNetworkMon.desktop.in > QtNetworkMon.desktop; \
-	fi;
+#	if [ -f "/usr/bin/lxqt-sudo" ]; then \
+#		sed 's/%SUDO%/lxqt-sudo/g' QtNetworkMon.desktop.in > QtNetworkMon.desktop; \
+#	elif [ -f "/usr/bin/gksudo" ]; then \
+#		sed 's/%SUDO%/gksudo/g' QtNetworkMon.desktop.in > QtNetworkMon.desktop; \
+#	elif [ -f "/usr/bin/kdesudo" ]; then \
+#		sed 's/%SUDO%/kdesudo/g' QtNetworkMon.desktop.in > QtNetworkMon.desktop; \
+#	fi;
 
 override_dh_auto_install:
 	@

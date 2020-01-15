@@ -1,0 +1,25 @@
+#!/bin/sh
+set -e
+
+DEST=/usr/share/applications/QtNetworkMon.desktop
+SRC=/usr/share/doc/qtnetworkmonitor/
+name=`basename $0 .sh`
+
+case "$1" in
+    *install|*configure)
+        if [ -e "/usr/bin/lxqt-sudo" ]; then
+            sed 's/%SUDO%/lxqt-sudo/g' $SRC/QtNetworkMon.desktop.in > $DEST
+        elif [ -e "/usr/bin/gksudo" ]; then
+            sed 's/%SUDO%/gksudo/g' $SRC/QtNetworkMon.desktop.in > $DEST
+        elif [ -e "/usr/bin/kdesudo" ]; then
+            sed 's/%SUDO%/kdesudo/g' $SRC/QtNetworkMon.desktop.in > $DEST
+        fi;
+        ;;
+    *)
+        echo "Usage: $name [--install|--configure]"
+        exit 1
+        ;;
+esac
+
+exit 0
+

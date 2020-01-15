@@ -2,16 +2,17 @@ Source: qtnetworkmonitor
 Section: system
 Priority: optional
 Maintainer: jimmy <jimmy@jimmy-alpha>
-Build-Depends: debhelper (>= 10), qtbase5-dev, libpcap0.8-dev, libpng-dev, libicu-dev, libxcb1-dev, sed,
+Build-Depends: debhelper (>= 10), libc6-dev, qtbase5-dev, libpcap0.8-dev,
+    libpng-dev, libicu-dev, libxcb1-dev, sed, libqt5charts5-dev,
     lxqt-sudo | gksu | kdesudo
 Standards-Version: 4.1.2
 Homepage: https://github.com/coolshou/qtnetworkmonitor
-#Vcs-Git: https://anonscm.debian.org/git/collab-maint/qtnetworkmonitor.git
-#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/qtnetworkmonitor.git
+Vcs-Git: https://github.com/coolshou/qtnetworkmonitor.git
+Vcs-Browser: https://github.com/coolshou/qtnetworkmonitor.git
 
 Package: qtnetworkmonitor
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, lxqt-sudo | gksu | kdesudo
+Depends: ${shlibs:Depends}, ${misc:Depends}, lxqt-sudo | gksu | kdesudo, sed
 Description: A Free, Open Source, Portable (Windows, Unix / Linux) Network Monitor
  Qt Network Monitor is a KISS network monitor that monitors how much bandwidth is
  being used on a daily basis. It is portable and runs on Windows and Linux,
