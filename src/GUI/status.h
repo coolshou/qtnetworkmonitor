@@ -24,12 +24,16 @@ public:
     void addData(qreal x, qreal y);
     void setTotal(QString total);
     void setCurrent(QString current);
+    void setStartTime(qint64 stime);
 
 private:
     Ui::Status *ui;
-    Scope      *dataScope;
+    //Scope      *dataScope;
     Chart *chart;
     QChartView *chartView;
+    qint64 startTime;
+    //
+    qreal max;
 };
 
 #endif // STATUS_H

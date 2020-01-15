@@ -34,6 +34,7 @@
 #include <QtCore/QRandomGenerator>
 #include <QtCore/QDebug>
 #include <QFont>
+#include <QDateTime>
 
 Chart::Chart(QGraphicsItem *parent, Qt::WindowFlags wFlags):
     QChart(QChart::ChartTypeCartesian, parent, wFlags),
@@ -61,11 +62,14 @@ Chart::Chart(QGraphicsItem *parent, Qt::WindowFlags wFlags):
     m_series->attachAxis(m_axisY);
     //
     setLabelsFontSize(8);
-    //m_axisX->setLabelFormat("%i");
-    showAxisX(false);
+    m_axisX->setLabelFormat("%i");
+    m_axisY->setLabelFormat("%i");
+    //showAxisX(false);
     //
     m_axisX->setTickCount(10);
-    m_axisX->setRange(0, 10);
+    //we use time stemp as x asix
+    //qint64 curTime = QDateTime::currentSecsSinceEpoch();
+    m_axisX->setRange(0, 60);
     m_axisY->setTickCount(3);
     m_axisY->setRange(0, 100);
 
@@ -80,10 +84,10 @@ Chart::~Chart()
 void Chart::addData(qreal x, qreal y)
 {   //add x,y data
     if (y >= m_axisY->max()) {
-        m_axisY->setMax(y+10);
+        m_axisY->setMax(y+100);
     }
-
     m_series->append(x, y);
+    m_axisX->setMax(m_series->count());
 }
 
 void Chart::setLabelsFontSize(int size)

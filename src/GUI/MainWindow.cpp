@@ -7,7 +7,7 @@
 #include <QFile>
 #include <QDir>
 #include <QMessageBox>
-
+#include <QDateTime>
 
 MainWindow::MainWindow()
 {
@@ -330,6 +330,7 @@ void MainWindow::updateGUI()
     //Total data downloaded:
     QString DownloadKBTot_S;
     QString UploadKBTot_S;
+    qint64 curTime = QDateTime::currentSecsSinceEpoch();
 
     float DataDownloadedSoFar = PCHandler.get_TotalDataDownloaded_bytes() + Download_offset;
     float DataUploadedSoFar = PCHandler.get_TotalDataUploaded_bytes() + Upload_offset;
@@ -361,7 +362,8 @@ void MainWindow::updateGUI()
         DataDownloadCurrent = DataDownloadCurrent * 8;
     }
     divisor = getDivisor(DataDownloadCurrent);
-    QString DownloadKBp_S = DownloadKBpS_S.setNum( static_cast<int>((DataDownloadCurrent/divisor)));
+    int DownloadKBp = static_cast<int>((DataDownloadCurrent/divisor));
+    QString DownloadKBp_S = DownloadKBpS_S.setNum(DownloadKBp);
     //DownloadKBpS->setText(DownloadKBp_S);
     QString DownloadKBpS_units_S = QString( getUnits(DataDownloadCurrent).c_str() + QString("ps"));
     //DownloadKBpS_units->setText(DownloadKBpS_units_S);
@@ -373,12 +375,17 @@ void MainWindow::updateGUI()
         DataUploadCurrent = DataUploadCurrent * 8;
     }
     divisor = getDivisor(DataUploadCurrent);
-    QString UploadKBp_S = UploadKBpS_S.setNum(static_cast<int>((DataUploadCurrent/divisor)));
+    int UploadKBp = static_cast<int>((DataUploadCurrent/divisor));
+    QString UploadKBp_S = UploadKBpS_S.setNum(UploadKBp);
     //UploadKBpS->setText(UploadKBp_S);
     QString UploadKBpS_units_S = QString( getUnits(DataUploadCurrent).c_str() + QString("ps"));
     //UploadKBpS_units->setText(UploadKBpS_units_S);
 
     UploadStatus->setCurrent(UploadKBp_S + " " + UploadKBpS_units_S);
+
+    //update chart data
+    DownloadStatus->addData(static_cast<qreal>(curTime), DownloadKBp);
+    UploadStatus->addData(static_cast<qreal>(curTime), UploadKBp);
 
     //Update the messages
     Console->Display_Messages( PCHandler.get_messages() );
@@ -394,6 +401,7 @@ void MainWindow::updateKBPS()
         }
 
     Data_Timestamp = get_time();
+
 
     DataDownloadedSinceLastCall =
     (PCHandler.get_TotalDataDownloaded_bytes() + Download_offset)-LastAmountData_download;
@@ -420,8 +428,10 @@ void MainWindow::updateKBPS()
     dataScope->Set_Data(SpeedHist_Upload, 1);
 
     //TODO: update chart data
-    //DownloadStatus->addData(DataDownloadedSinceLastCall, Data_Timestamp);
-    //UploadStatus->addData(DataDownloadedSinceLastCall, Data_Timestamp);
+//    DownloadStatus->addData(static_cast<qreal>(curTime),
+//                            static_cast<qreal>(DataDownloadedSinceLastCall));
+//    UploadStatus->addData(static_cast<qreal>(curTime),
+//                          static_cast<qreal>(DataUploadedSinceLastCall));
 
 
     SaveDataToFile();
