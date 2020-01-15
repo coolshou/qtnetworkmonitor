@@ -25,6 +25,7 @@
 #include "Scope.h"
 #include "Console.h"
 #include "../const.h"
+#include "../Misc.h"
 
 #include "../IO/ReadWriteFile.h"
 #include "status.h"
@@ -53,6 +54,12 @@ class MainWindow : public QWidget
         int StartCapture();
         void LoadOptionsFromFile();
         void SaveOptionsToFile();
+        void setAutoStart(bool start);
+        void setUnitType(int unittype);
+        void setDeviceNo(unsigned devno);
+        bool getAutoStart();
+        int getUnitType();
+        unsigned  getDeviceNo();
 
     protected:
        //void paintEvent(QPaintEvent *event);
@@ -82,6 +89,10 @@ class MainWindow : public QWidget
         QString homePath;
         QString StatsFile;
         QSettings *setting;
+        //config
+        int unittype;
+        bool autostart;
+        unsigned int deviceno;
 
         //GUI fns
         void setupGUI();
@@ -94,60 +105,60 @@ class MainWindow : public QWidget
         void SaveDataToFile();
 
         //!Pcap wrapper
-            PcapHandler PCHandler;
+        PcapHandler PCHandler;
 
-            //Info on the data
-            float LastAmountData_download;
-            float LastAmountData_upload;
-            float DataDownloadedSinceLastCall;
-            float DataUploadedSinceLastCall;
-            //!Data that was downloaded from a previous session
-            float Download_offset;
-            //!Data that was uploaded from a previous session
-            float Upload_offset;
-            //!Keeps track of the last time the data was sampled
-            //!Used to reset the counter on a new day
-            string Data_Timestamp;
+        //Info on the data
+        float LastAmountData_download;
+        float LastAmountData_upload;
+        float DataDownloadedSinceLastCall;
+        float DataUploadedSinceLastCall;
+        //!Data that was downloaded from a previous session
+        float Download_offset;
+        //!Data that was uploaded from a previous session
+        float Upload_offset;
+        //!Keeps track of the last time the data was sampled
+        //!Used to reset the counter on a new day
+        string Data_Timestamp;
 
-            //!(Starts at 1)
-            unsigned int Default_DeviceNo;
+        //!(Starts at 1)
+        unsigned int Default_DeviceNo;
 
-            vector<float> SpeedHist_Download;
-            vector<float> SpeedHist_Upload;
+        vector<float> SpeedHist_Download;
+        vector<float> SpeedHist_Upload;
 
         //!The threaded object that gets data from the wrapper
-            ThreadListener * ThreadL;
+        ThreadListener * ThreadL;
 
-            //Display widgets:
-            Status * DownloadStatus;
-            Status * UploadStatus;
+        //Display widgets:
+        Status * DownloadStatus;
+        Status * UploadStatus;
 
-            QGroupBox   *   DownloadUploadGB;
+        //QGroupBox   *   DownloadUploadGB;
 
-            QPushButton *   AboutWebsite;
+        QPushButton *   AboutWebsite;
 
-            QLabel      *   DownloadKBpS;
-            QLabel      *   DownloadKBpS_label;
-            QLabel      *   DownloadKBpS_units;
+        //QLabel      *   DownloadKBpS;
+        //QLabel      *   DownloadKBpS_label;
+        //QLabel      *   DownloadKBpS_units;
 
-            QLabel      *   UploadKBpS;
-            QLabel      *   UploadKBpS_label;
-            QLabel      *   UploadKBpS_units;
+        //QLabel      *   UploadKBpS;
+        //QLabel      *   UploadKBpS_label;
+        //QLabel      *   UploadKBpS_units;
 
-            QLabel      *   DownloadKBTotal;
-            QLabel      *   DownloadKBTotal_label;
-            QLabel      *   DownloadKBTotal_units;
+        //QLabel      *   DownloadKBTotal;
+        //QLabel      *   DownloadKBTotal_label;
+        //QLabel      *   DownloadKBTotal_units;
 
-            QLabel      *   UploadKBTotal;
-            QLabel      *   UploadKBTotal_label;
-            QLabel      *   UploadKBTotal_units;
+        //QLabel      *   UploadKBTotal;
+        //QLabel      *   UploadKBTotal_label;
+        //QLabel      *   UploadKBTotal_units;
 
-            QComboBox   *   DropListDeviceChoice;
-            QGroupBox   *   DropListDeviceGB;
-            QPushButton *   PushBDropListSetToCurrent;
+        QComboBox   *   DropListDeviceChoice;
+        QGroupBox   *   DropListDeviceGB;
+        QPushButton *   PushBDropListSetToCurrent;
 
-            QConsole    *   Console;
-            Scope       *   dataScope;
+        QConsole    *   Console;
+        Scope       *   dataScope;
 };
 
 #endif

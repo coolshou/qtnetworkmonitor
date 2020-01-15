@@ -23,7 +23,7 @@ void Scope::Set_Data(vector<float> data_in, int target)
     assert( target < (int)data.size() +1 );
 
     //The data about to be pushed needs to be intialized in the vector
-    if( target == (int)data.size())
+    if( target == static_cast<int>(data.size()))
     {
         data.push_back( data_in );
         vector<float> newData;
@@ -115,7 +115,7 @@ void Scope::paintEvent(QPaintEvent *)
         {
             if ( (Scale[i][3] - Scale[i][2]) > MaxEmphY)
             {
-                MaxEmphY = (int)(Scale[i][3] - Scale[i][2]);
+                MaxEmphY = static_cast<int>((Scale[i][3] - Scale[i][2]));
                 Scale_to_use = i;
             }
 

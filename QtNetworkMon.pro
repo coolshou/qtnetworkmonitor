@@ -1,13 +1,15 @@
 TEMPLATE = app
 TARGET = QtNetworkMon
 
-QT += gui widgets
+QT += gui widgets charts
 
 MAJOR = 0
-MINOR = 4
-BUILD = 0
-PATCH = 0
-COMPANYNAME = "coolshou.idv"
+MINOR = 5
+#year
+BUILD = 2020
+#month+day
+PATCH = 0115
+COMPANYNAME = "coolshou.idv.tw"
 PRODUCTNAME = "qtnetworkmonitor"
 PRODUCTDESCRIPTION = "Qt Network Monitor is a KISS network monitor that monitors how much bandwidth is being used on a daily basis"
 
@@ -80,6 +82,7 @@ win32{
 
 unix{
     QMAKE_SUBSTITUTES += $$PWD/src/version.h.in
+    QMAKE_SUBSTITUTES += $$PWD/debian/changelog.in
     LIBS += -L ./usr/lib -lpcap
 }
 
@@ -95,7 +98,10 @@ HEADERS += \
     src/GUI/Scope.h \
     src/IO/ReadWriteFile.h \
     src/version.h.in \
-    src/GUI/status.h
+    src/GUI/status.h \
+    src/const.h \
+    src/GUI/dlgconfig.h \
+    src/GUI/chart.h
 
 
 SOURCES += \
@@ -108,7 +114,9 @@ SOURCES += \
     src/GUI/MasterWindow.cpp \
     src/GUI/Scope.cpp \
     src/IO/ReadWriteFile.cpp \
-    src/GUI/status.cpp
+    src/GUI/status.cpp \
+    src/GUI/dlgconfig.cpp \
+    src/GUI/chart.cpp
 
 DISTFILES += \
     QtNetworkMon.manifest \
@@ -116,14 +124,21 @@ DISTFILES += \
     installer/config/config.xml.in \
     installer/packages/coolshou.idv/meta/package.xml.in \
     installer/packages/npcap/meta/package.xml.in \
-    src/setIcon.rc
+    src/setIcon.rc \
+    debian/control \
+    debian/rules \
+    QtNetworkMon.desktop.in \
+    debian/qtnetworkmonitor.install \
+    debian/changelog.in \
+    debian/qtnetworkmonitor.postinst \
+    debian/qtnetworkmonitor.postrm
 
 unix{
     DISTFILES += \
         src/GFX/icon/QtNetworkMon.png \
-        QtNetworkMon.desktop \
 }
 
 FORMS += \
-    src/GUI/status.ui
+    src/GUI/status.ui \
+    src/GUI/dlgconfig.ui
 

@@ -16,10 +16,12 @@ MainWindow::MainWindow()
 #else
     homePath = QDesktopServices::storageLocation(QDesktopServices::TempLocation);
 #endif
-    QDir path(QDir::cleanPath(homePath + QDir::separator() + qApp->applicationName()));
+    QDir path(QDir::cleanPath(homePath + QDir::separator() +
+                              get_username() + QDir::separator() +
+                              qApp->applicationName()));
     StatsFile = path.filePath("Stats.dat");
     if (! QDir(path.absolutePath()).exists()){
-        QDir().mkdir(path.absolutePath());
+        QDir().mkpath(path.absolutePath());
     }
     QFile file( StatsFile );
     if ( file.open(QIODevice::ReadWrite) )
@@ -31,7 +33,8 @@ MainWindow::MainWindow()
     if (! path.exists(StatsFile)) {
         qDebug() << "file not exist: " << StatsFile;
     }
-    setting= new QSettings(this);
+    setting = new QSettings();
+    LoadOptionsFromFile();
 
     //Members inits:
     LastAmountData_download = 0;
@@ -40,8 +43,12 @@ MainWindow::MainWindow()
     DataUploadedSinceLastCall = 0;
     Data_Timestamp = get_time();
 
-    //GUI defaults
-    Default_DeviceNo = 1;
+    //GUI defaults TODO: DeviceNo come from setting
+    if (deviceno < 1){
+        Default_DeviceNo = 1;
+    } else {
+        Default_DeviceNo = deviceno;
+    }
 
     //Load from file (erase the defaults if needed)
     LoadDataFromFile();
@@ -64,11 +71,11 @@ void  MainWindow::setupGUI()
 
     //-----------------Sets up the widgets---------------------------
     DownloadStatus = new Status("Received:", this);
-
     UploadStatus = new Status("Sent:", this);
 
 
     {//Up/Down Stats
+        /*
         DownloadKBpS = new QLabel("0",this);
         UploadKBpS = new QLabel("0",this);
         DownloadKBTotal = new QLabel("0",this);
@@ -101,6 +108,7 @@ void  MainWindow::setupGUI()
         layoutH1->addWidget(UploadKBTotal_units,Qt::AlignLeft);
 
         DownloadUploadGB->setLayout(layoutH1);
+*/
     }
 
     {//Device choice menu
@@ -128,10 +136,11 @@ void  MainWindow::setupGUI()
         //mainLayout->addWidget(AboutWebsite, Qt::AlignBottom);
 
         mainLayout->addWidget(DropListDeviceGB);
+
         mainLayout->addWidget(DownloadStatus);
         mainLayout->addWidget(UploadStatus);
-        mainLayout->addWidget(DownloadUploadGB);
 
+        //mainLayout->addWidget(DownloadUploadGB);
         mainLayout->addWidget(dataScope, Qt::AlignCenter);
 
         mainLayout->addWidget(Console, Qt::AlignBottom);
@@ -148,7 +157,7 @@ void  MainWindow::setupGUI()
     //Keep track on the speed of the data received
     QTimer *timer_data = new QTimer(this);
     connect( timer_data, SIGNAL(timeout()), this, SLOT(updateKBPS()) );
-    timer_data->start(1000);
+    timer_data->start(TRACK_TIME);
 
     ThreadL = new ThreadListener(&PCHandler);
 
@@ -194,7 +203,7 @@ int MainWindow::OpenDevice(int DeviceNO)
     vector<string> * Devices = new vector<string>;
     PCHandler.FindAvailDevices(Devices);
 
-    cout<<"Availables devices"<<endl;
+    qDebug() <<"Availables devices"<<endl;
 
     DropListDeviceChoice->clear();
     for(unsigned int x=0; x< Devices->size();x++)
@@ -208,17 +217,17 @@ int MainWindow::OpenDevice(int DeviceNO)
     if (DeviceNO != -1)
         Device_to_Open = DeviceNO;
     else
-        Device_to_Open = Default_DeviceNo;
+        Device_to_Open = static_cast<int>(Default_DeviceNo);
 
     if ( Devices->size() < 1 )
     {
-        cout<<"No device available. (Linux-> Sudo?)"<<endl;
+        qDebug()<<"No device available. (Linux-> Sudo?)"<<endl;
         return -1;
     }
 
-    if ( (Device_to_Open < 1) || (Device_to_Open > (int)Devices->size()) )
+    if ( (Device_to_Open < 1) || (Device_to_Open > static_cast<int>(Devices->size())) )
     {
-        cout<<"Invalid device number or default device, trying device #1."<<endl;
+        qDebug()<<"Invalid device number or default device, trying device #1."<<endl;
         Device_to_Open = 1;
     }
 
@@ -238,8 +247,9 @@ int MainWindow::StartCapture()
 void MainWindow::ChangeDevice()
 {
 
-    int device_No = DropListDeviceChoice->currentIndex();
-    Default_DeviceNo = device_No+1;
+    int idx = DropListDeviceChoice->currentIndex();
+    int device_No = idx + 1;
+    Default_DeviceNo = static_cast<unsigned int>(device_No);
 
     ThreadL->instructStop();
     if(!ThreadL->wait(2500))
@@ -258,32 +268,61 @@ void MainWindow::ChangeDevice()
     }
 
     clearMemory();
-    OpenDevice(device_No+1);
+    OpenDevice(device_No);
     StartCapture();
 }
 
 string MainWindow::getUnits(float nBits)
 {
-    if ( nBits < 1000.0 )
-        return "B";
-    if ( nBits < 1000.0*1000.0 )
-        return "kB";
-    if ( nBits < 1000.0*1000.0*1000.0 )
-        return "MB";
-    else
-        return "GB";
+    if ( nBits < static_cast<float>(1000.0)){
+        if (unittype == UnitBYTES){
+            return "B";
+        } else {
+            return "b";
+        }
+    }
+    if ( nBits < static_cast<float>(1000.0*1000.0)){
+        if (unittype == UnitBYTES){
+            return "KB";
+        } else {
+            return "Kb";
+        }
+    }
+    if ( nBits < static_cast<float>(1000.0*1000.0*1000.0)){
+        if (unittype == UnitBYTES){
+            return "MB";
+        } else {
+            return "Mb";
+        }
+    }
+    if ( nBits < static_cast<float>(1000.0*1000.0*1000.0*1000.0)){
+        if (unittype == UnitBYTES){
+            return "GB";
+        } else {
+            return "Gb";
+        }
+    } else {
+        if (unittype == UnitBYTES){
+            return "TB";
+        } else {
+            return "Tb";
+        }
+    }
+    //PB, EB, ZB, YB
 }
 
 float MainWindow::getDivisor(float nBits)
 {
-    if ( nBits < 1000.0 )
+    if ( nBits < static_cast<float>(1000.0))
         return 1.0f;
-    if ( nBits < 1000.0*1000.0 )
+    if ( nBits < static_cast<float>(1000.0*1000.0))
         return 1000.0f;
-    if ( nBits < 1000.0*1000.0*1000.0 )
+    if ( nBits < static_cast<float>(1000.0*1000.0*1000.0))
         return 1000.0f*1000.0f;
-    else
+    if ( nBits < static_cast<float>(1000.0*1000.0*1000.0*1000.0))
         return 1000.0f*1000.0f*1000.0f;
+    else
+        return 1000.0f*1000.0f*1000.0f*1000.0f;
 }
 
 void MainWindow::updateGUI()
@@ -294,30 +333,52 @@ void MainWindow::updateGUI()
 
     float DataDownloadedSoFar = PCHandler.get_TotalDataDownloaded_bytes() + Download_offset;
     float DataUploadedSoFar = PCHandler.get_TotalDataUploaded_bytes() + Upload_offset;
-
+    if (unittype == UnitBITS){
+        DataDownloadedSoFar = DataDownloadedSoFar * 8;
+        DataUploadedSoFar = DataUploadedSoFar * 8;
+    }
     float divisor = getDivisor( DataDownloadedSoFar );
-    DownloadKBTotal->setText( DownloadKBTot_S.setNum( (int) (DataDownloadedSoFar / divisor) ) );
+    QString DownloadKBTotal_S = DownloadKBTot_S.setNum( static_cast<int>((DataDownloadedSoFar / divisor) ));
+    //DownloadKBTotal->setText(DownloadKBTotal_S);
     QString DownloadKBTotal_units_S = QString( getUnits(DataDownloadedSoFar).c_str());
-    DownloadKBTotal_units->setText(DownloadKBTotal_units_S);
+    //DownloadKBTotal_units->setText(DownloadKBTotal_units_S);
+
+    DownloadStatus->setTotal(DownloadKBTotal_S + " " + DownloadKBTotal_units_S);
 
     divisor = getDivisor( DataUploadedSoFar );
-    UploadKBTotal->setText( UploadKBTot_S.setNum( (int) (DataUploadedSoFar / (divisor) ) ) );
+    QString UploadKBTotal_S = UploadKBTot_S.setNum( static_cast<int>((DataUploadedSoFar / (divisor) ) ));
+    //UploadKBTotal->setText(UploadKBTotal_S);
     QString UploadKBTotal_units_S = QString( getUnits( DataUploadedSoFar ).c_str());
-    UploadKBTotal_units->setText(UploadKBTotal_units_S);
+    //UploadKBTotal_units->setText(UploadKBTotal_units_S);
 
-    //kb/s:
+    UploadStatus->setTotal(UploadKBTotal_S + " " + UploadKBTotal_units_S);
+    // #######################################################################
+    //current speed kb/s:
     QString DownloadKBpS_S;
     QString UploadKBpS_S;
+    float DataDownloadCurrent = DataDownloadedSinceLastCall;
+    if (unittype == UnitBITS){
+        DataDownloadCurrent = DataDownloadCurrent * 8;
+    }
+    divisor = getDivisor(DataDownloadCurrent);
+    QString DownloadKBp_S = DownloadKBpS_S.setNum( static_cast<int>((DataDownloadCurrent/divisor)));
+    //DownloadKBpS->setText(DownloadKBp_S);
+    QString DownloadKBpS_units_S = QString( getUnits(DataDownloadCurrent).c_str() + QString("ps"));
+    //DownloadKBpS_units->setText(DownloadKBpS_units_S);
 
-    divisor = getDivisor( DataDownloadedSinceLastCall );
-    DownloadKBpS->setText( DownloadKBpS_S.setNum( (int) (DataDownloadedSinceLastCall/divisor) ));
-    QString DownloadKBpS_units_S = QString( getUnits(DataDownloadedSinceLastCall).c_str() + QString("/s")  );
-    DownloadKBpS_units->setText(DownloadKBpS_units_S);
+    DownloadStatus->setCurrent(DownloadKBp_S + " " + DownloadKBpS_units_S);
 
-    divisor = getDivisor( DataUploadedSinceLastCall );
-    UploadKBpS->setText( UploadKBpS_S.setNum((int) (DataUploadedSinceLastCall/divisor) ));
-    QString UploadKBpS_units_S = QString( getUnits(DataUploadedSinceLastCall).c_str() + QString("/s") );
-    UploadKBpS_units->setText(UploadKBpS_units_S);
+    float DataUploadCurrent = DataUploadedSinceLastCall;
+    if (unittype == UnitBITS){
+        DataUploadCurrent = DataUploadCurrent * 8;
+    }
+    divisor = getDivisor(DataUploadCurrent);
+    QString UploadKBp_S = UploadKBpS_S.setNum(static_cast<int>((DataUploadCurrent/divisor)));
+    //UploadKBpS->setText(UploadKBp_S);
+    QString UploadKBpS_units_S = QString( getUnits(DataUploadCurrent).c_str() + QString("ps"));
+    //UploadKBpS_units->setText(UploadKBpS_units_S);
+
+    UploadStatus->setCurrent(UploadKBp_S + " " + UploadKBpS_units_S);
 
     //Update the messages
     Console->Display_Messages( PCHandler.get_messages() );
@@ -342,10 +403,10 @@ void MainWindow::updateKBPS()
     (PCHandler.get_TotalDataUploaded_bytes() + Upload_offset)-LastAmountData_upload;
     LastAmountData_upload = (PCHandler.get_TotalDataUploaded_bytes() + Upload_offset);
 
-    if ( DataDownloadedSinceLastCall < 0.0 )
+    if ( DataDownloadedSinceLastCall < static_cast<float>(0.0) )
         DataDownloadedSinceLastCall = 0.0;
 
-    if ( DataUploadedSinceLastCall < 0.0 )
+    if ( DataUploadedSinceLastCall < static_cast<float>(0.0) )
         DataUploadedSinceLastCall = 0.0;
 
     //Push one in, remove one
@@ -357,6 +418,11 @@ void MainWindow::updateKBPS()
 
     dataScope->Set_Data(SpeedHist_Download, 0);
     dataScope->Set_Data(SpeedHist_Upload, 1);
+
+    //TODO: update chart data
+    //DownloadStatus->addData(DataDownloadedSinceLastCall, Data_Timestamp);
+    //UploadStatus->addData(DataDownloadedSinceLastCall, Data_Timestamp);
+
 
     SaveDataToFile();
     updateGUI();
@@ -393,7 +459,7 @@ void MainWindow::LoadDataFromFile()
     if( Reader.getData().size() >= 2 )
         {
 
-            Default_DeviceNo = (unsigned int)Reader.getData()[0];//1212 Haha, not right!
+            Default_DeviceNo = static_cast<unsigned int>(Reader.getData()[0]);//1212 Haha, not right!
 
             //Checks the timestamp of the data
             if ( is_today( Reader.get_timestamp() ) )
@@ -422,7 +488,7 @@ void MainWindow::SaveDataToFile()
     InfoReadWrite Writer;
 
     vector<float> data_out;
-    data_out.push_back( (float) Default_DeviceNo );
+    data_out.push_back( static_cast<float>(Default_DeviceNo) );
     data_out.push_back( PCHandler.get_TotalDataDownloaded_bytes() + Download_offset);
     data_out.push_back( PCHandler.get_TotalDataUploaded_bytes() + Upload_offset);
 
@@ -432,20 +498,58 @@ void MainWindow::SaveDataToFile()
 
 void MainWindow::LoadOptionsFromFile()
 {
-    cout<<"Not implemented yet."<<endl;
-    //TODO: loadSetting
     //setting->beginGroup("MainWindow");
     //this->setGeometry(setting->value("geometry", QRect(0,0, 520, 500)).toRect());
     //setting->endGroup();
-
+    setting->beginGroup("Main");
+    setUnitType(setting->value("unittype", 0).toInt());
+    setAutoStart(setting->value("autostart", false).toBool());
+    setDeviceNo(setting->value("DeviceNo", 1).toUInt());
+    setting->endGroup();
 }
 
 void MainWindow::SaveOptionsToFile()
 {
-    cout<<"Not implemented yet."<<endl;
-    //TODO: saveSetting
     //setting->beginGroup("MainWindow");
     //setting->setValue("geometry", this->window()->geometry());
     //setting->endGroup();
+    setting->beginGroup("Main");
+    setting->setValue("unittype", getUnitType());
+    setting->setValue("autostart", getAutoStart());
+    setting->setValue("DeviceNo", getDeviceNo());
+    setting->endGroup();
+    setting->sync();
+
+}
+
+void MainWindow::setAutoStart(bool start)
+{
+    autostart = start;
+}
+//TODO: create/remove autostart to system
+
+void MainWindow::setUnitType(int utype)
+{
+    unittype = utype;
+}
+
+void MainWindow::setDeviceNo(unsigned int devno)
+{
+    deviceno = devno;
+}
+
+bool MainWindow::getAutoStart()
+{
+    return autostart;
+}
+
+int MainWindow::getUnitType()
+{
+    return unittype;
+}
+
+unsigned int MainWindow::getDeviceNo()
+{
+    return deviceno;
 }
 

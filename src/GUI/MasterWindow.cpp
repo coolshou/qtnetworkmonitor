@@ -5,8 +5,8 @@ MasterWindow::MasterWindow()
 {
     setWindowTitle(tr("Qt Network Monitor v%1").arg(qApp->applicationVersion()));
     setWindowIcon(QIcon(":/GFX/systray/TrayIconNormal.png"));
-    setting= new QSettings(this);
-    loadSetting();
+    setting= new QSettings();
+    dlgconfig = new DlgConfig();
     //resize(520, 340);
 
     widgetMainWindow = new MainWindow();
@@ -14,6 +14,8 @@ MasterWindow::MasterWindow()
 
     buildMenu();
     buildTray();
+
+    loadSetting();
 }
 
 void MasterWindow::buildTray()
@@ -48,7 +50,7 @@ void MasterWindow::buildMenu()
 
     OptionAct = new QAction(tr("&Config"), this);
     OptionAct->setStatusTip(tr("Option config"));
-    //TODO: optin act connect
+    connect(OptionAct, SIGNAL(triggered()), this, SLOT(showConfig()));
 
     AboutAct = new QAction(tr("&About"), this);
     AboutAct->setStatusTip(tr("About"));
@@ -70,7 +72,6 @@ void MasterWindow::buildMenu()
 void MasterWindow::closeEvent(QCloseEvent *event)
 {
     trayIcon->setVisible(true);
-
     if (trayIcon->isVisible())
     {
         hide();
@@ -86,8 +87,8 @@ void MasterWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     case QSystemTrayIcon::DoubleClick:
         //trayIcon->setVisible(false);
         show();
-
-    default:;
+    default:
+        ;
     }
 }
 void MasterWindow::appClose()
@@ -95,22 +96,53 @@ void MasterWindow::appClose()
     this->saveSetting();
     trayIcon->setVisible(false);
     qApp->exit(0);
-    //qApp->quit();
+}
+
+void MasterWindow::showConfig()
+{
+    int rc;
+    //TODO: show config dialog
+    qDebug() << "TODO: show config dialog";
+    dlgconfig->set_autostart(widgetMainWindow->getAutoStart());
+    dlgconfig->set_unittype(widgetMainWindow->getUnitType());
+    rc = dlgconfig->exec();
+    if (rc == QDialog::Accepted) {
+        //TODO: auto start
+        // unit
+        qDebug() << "Unit type:" << dlgconfig->get_UnitType();
+        widgetMainWindow->setUnitType(dlgconfig->get_UnitType());
+        widgetMainWindow->setAutoStart(dlgconfig->get_AutoStart());
+    }
 }
 
 void  MasterWindow::loadSetting()
 {
-    //TODO: loadSetting
+    //loadSetting
     widgetMainWindow->LoadOptionsFromFile();
     setting->beginGroup("MainWindow");
     this->setGeometry(setting->value("geometry", QRect(0,0, 520, 500)).toRect());
     setting->endGroup();
+    /*
+    setting->beginGroup("Main");
+    widgetMainWindow->setUnitType(setting->value("unittype", 0).toInt());
+    widgetMainWindow->setAutoStart(setting->value("autostart", false).toBool());
+    widgetMainWindow->setDeviceNo(setting->value("DeviceNo", 0).toInt());
+    setting->endGroup();
+    */
 }
 void  MasterWindow::saveSetting()
 {
+    // saveSetting
     widgetMainWindow->SaveOptionsToFile();
-    //TODO: saveSetting
     setting->beginGroup("MainWindow");
     setting->setValue("geometry", this->window()->geometry());
     setting->endGroup();
+    /*
+    setting->beginGroup("Main");
+    setting->setValue("unittype", widgetMainWindow->getUnitType());
+    setting->setValue("autostart", widgetMainWindow->getAutoStart());
+    setting->setValue("DeviceNo", widgetMainWindow->getDeviceNo());
+    setting->endGroup();
+    */
+    setting->sync();
 }

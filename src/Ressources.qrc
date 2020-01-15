@@ -1,8 +1,9 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource prefix="/">
-    <file>GFX/systray/bad.svg</file>
-    <file>GFX/systray/heart.svg</file>
-    <file>GFX/systray/trash.svg</file>
-    <file>GFX/systray/TrayIconNormal.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>GFX/systray/bad.svg</file>
+        <file>GFX/systray/heart.svg</file>
+        <file>GFX/systray/trash.svg</file>
+        <file>GFX/systray/TrayIconNormal.png</file>
+        <file>GFX/config.png</file>
+    </qresource>
 </RCC>

@@ -13,6 +13,7 @@ belong to any of the other modules specifically.
 #include <stdio.h>
 
 #include <assert.h>
+#include <QString>
 
 using namespace std;
 
@@ -33,5 +34,8 @@ False if not.
 which isn't a very smart thing to do. It seems OK though).
 */
 bool is_today(string);
+
+QString get_username();
+bool is_root();
 
 #endif

@@ -1,4 +1,12 @@
 #include "Misc.h"
+#include <QtGlobal>
+#include <QtDebug>
+
+#ifdef Q_OS_LINUX
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#endif
 
 string int_to_string(int Iin)
 {
@@ -85,4 +93,43 @@ bool is_today(string S_in)
     }
 
     return same;
+}
+
+QString get_username()
+{
+#ifdef Q_OS_WIN
+    char acUserName[MAX_USERNAME];
+    DWORD nUserName = sizeof(acUserName);
+    if (GetUserName(acUserName, &nUserName))
+        //qDebug() << acUserName;
+        return QString::fromLocal8Bit(acUserName);
+    return "";
+#endif
+#ifdef Q_OS_LINUX
+    uid_t uid = geteuid();
+    struct passwd *pw = getpwuid(uid);
+    if (pw)
+    {
+        //qDebug() << "user:" << QString::fromLocal8Bit(pw->pw_name);
+        return QString::fromLocal8Bit(pw->pw_name);
+    }
+    return "";
+#endif
+}
+
+bool is_root()
+{
+#ifdef Q_OS_WIN
+    //TODO: windows administrator
+    return true
+#endif
+#ifdef Q_OS_LINUX
+    uid_t uid = geteuid();
+    if (uid) {
+        qDebug() << "You are not root!" << "(" << uid << ")";
+        return false;
+    } else {
+        return true;
+    }
+#endif
 }

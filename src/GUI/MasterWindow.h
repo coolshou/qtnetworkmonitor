@@ -11,6 +11,8 @@
 #include <QSettings>
 
 #include "MainWindow.h"
+#include "dlgconfig.h"
+#include "../const.h"
 
 class MasterWindow : public QMainWindow
 {
@@ -29,6 +31,7 @@ class MasterWindow : public QMainWindow
         //!What to do when the 'X' is clicked
         void closeEvent(QCloseEvent *event);
         void appClose();
+        void showConfig();
 
     private:
         void saveSetting();
@@ -36,6 +39,7 @@ class MasterWindow : public QMainWindow
         void buildMenu();
         void buildTray();
         QSettings  * setting;
+        DlgConfig  * dlgconfig;
         MainWindow * widgetMainWindow;
 
         //Menu
