@@ -45,12 +45,15 @@ class Chart: public QChart
 {
     Q_OBJECT
 public:
-    Chart(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+    Chart(QColor color, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
     virtual ~Chart();
     void addData(qreal x, qreal y);
     void setLabelsFontSize(int size);
     void showAxisX(bool show);
     void showAxisY(bool show);
+    void setAxisYLabelFormat(QString t="%i");
+    void resetData();
+    bool getAxisXVisiable();
 
 public slots:
     void handleTimeout();

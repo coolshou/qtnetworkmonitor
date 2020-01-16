@@ -101,15 +101,11 @@ void MasterWindow::appClose()
 void MasterWindow::showConfig()
 {
     int rc;
-    //TODO: show config dialog
-    qDebug() << "TODO: show config dialog";
     dlgconfig->set_autostart(widgetMainWindow->getAutoStart());
     dlgconfig->set_unittype(widgetMainWindow->getUnitType());
     rc = dlgconfig->exec();
     if (rc == QDialog::Accepted) {
-        //TODO: auto start
-        // unit
-        qDebug() << "Unit type:" << dlgconfig->get_UnitType();
+        //TODO: auto start install/uninstall
         widgetMainWindow->setUnitType(dlgconfig->get_UnitType());
         widgetMainWindow->setAutoStart(dlgconfig->get_AutoStart());
     }

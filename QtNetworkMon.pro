@@ -8,7 +8,7 @@ MINOR = 5
 #year
 BUILD = 2020
 #month+day
-PATCH = 0115
+PATCH = 0116
 COMPANYNAME = "coolshou.idv.tw"
 PRODUCTNAME = "qtnetworkmonitor"
 PRODUCTDESCRIPTION = "Qt Network Monitor is a KISS network monitor that monitors how much bandwidth is being used on a daily basis"

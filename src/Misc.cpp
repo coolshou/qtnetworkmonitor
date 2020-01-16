@@ -133,3 +133,12 @@ bool is_root()
     }
 #endif
 }
+
+int get_BYTES_IDX(QString s)
+{
+    return slBYTES.indexOf(s);
+}
+int get_BITS_IDX(QString s)
+{
+    return slBITS.indexOf(s);
+}

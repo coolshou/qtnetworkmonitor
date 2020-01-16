@@ -7,14 +7,14 @@ void InfoReadWrite::save_txt(string filename_out, string out)
 
     ofstream myfile (filename_out.c_str());
 
-	if (myfile.is_open())
-	{
+    if (myfile.is_open())
+    {
         myfile <<out;
         myfile.close();
         //cout<<"File "<< filename_out<<" written"<<endl;
-	}else{
-	    cout<<"Problem with file I/O: "<<filename_out<<endl;
-	}
+    }else{
+        cout<<"Problem with file I/O: "<<filename_out<<endl;
+    }
 
 }
 
@@ -27,7 +27,9 @@ string InfoReadWrite::load_txt(string filename_in)
 
     if (myfile.is_open())
     {
-
+        //make sure seek from begin of file
+        myfile.clear();
+        myfile.seekg(0, ios::beg);
         while (! myfile.eof())
         {
             getline (myfile,line);
@@ -35,7 +37,7 @@ string InfoReadWrite::load_txt(string filename_in)
         }
         myfile.close();
     }else{
-    cout<<"File not found: "<<filename_in<<endl;
+        cout<<"File not found: "<<filename_in<<endl;
     }
 
     return all_lines;
@@ -43,21 +45,21 @@ string InfoReadWrite::load_txt(string filename_in)
 
 string InfoReadWrite::find_subs_between(string mess_in,string left, string right)
 {
-	//extracting posx:
-	string Spos="";
+    //extracting posx:
+    string Spos="";
 
     //unsigned int loc_1 = mess_in.find( left, 0 );
     size_t loc_1 = mess_in.find( left, 0 );
-   	if( loc_1 != string::npos ){
+    if( loc_1 != string::npos ){
         //unsigned int loc_2 = mess_in.find( right, loc_1+1 );
         size_t loc_2 = mess_in.find( right, loc_1+1 );
-		if( loc_2 != string::npos ){
-			Spos = mess_in.substr(loc_1 + left.size(), loc_2-loc_1 - left.size());
-		}else{
-		    cout<<"Can't find right element."<<endl;
-		    }
-	}else{
-        cout<<"Can't find left element."<<endl;
+        if( loc_2 != string::npos ){
+            Spos = mess_in.substr(loc_1 + left.size(), loc_2-loc_1 - left.size());
+        }else{
+            cout<<"Can't find right element."<<endl;
+            }
+    }else{
+        cout<<"Can't find left element.("<<mess_in << "):"<< left << endl;
     }
 
     return Spos;

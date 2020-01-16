@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QDateTime>
 
+
 MainWindow::MainWindow()
 {
 #if QT_VERSION >= 0x050000
@@ -67,49 +68,17 @@ MainWindow::MainWindow()
 
 void  MainWindow::setupGUI()
 {
-
-
     //-----------------Sets up the widgets---------------------------
-    DownloadStatus = new Status("Received:", this);
-    UploadStatus = new Status("Sent:", this);
-
-
-    {//Up/Down Stats
-        /*
-        DownloadKBpS = new QLabel("0",this);
-        UploadKBpS = new QLabel("0",this);
-        DownloadKBTotal = new QLabel("0",this);
-        UploadKBTotal = new QLabel("0",this);
-
-        DownloadKBpS_label = new QLabel("Down.:",this);
-        UploadKBpS_label = new QLabel("Up.:",this);
-        DownloadKBTotal_label = new QLabel("Down. total:",this);
-        UploadKBTotal_label = new QLabel("Up. total:",this);
-
-        DownloadKBpS_units = new QLabel("B/s",this);
-        UploadKBpS_units = new QLabel("B/s",this);
-        DownloadKBTotal_units = new QLabel("B/s",this);
-        UploadKBTotal_units = new QLabel("B/s",this);
-
-        DownloadUploadGB = new QGroupBox(tr("Download/Upload Stats"));
-        QHBoxLayout *layoutH1 = new QHBoxLayout;
-
-        layoutH1->addWidget(DownloadKBpS_label);
-        layoutH1->addWidget(DownloadKBpS);
-        layoutH1->addWidget(DownloadKBpS_units,Qt::AlignLeft);
-        layoutH1->addWidget(UploadKBpS_label);
-        layoutH1->addWidget(UploadKBpS);
-        layoutH1->addWidget(UploadKBpS_units,Qt::AlignLeft);
-        layoutH1->addWidget(DownloadKBTotal_label);
-        layoutH1->addWidget(DownloadKBTotal);
-        layoutH1->addWidget(DownloadKBTotal_units,Qt::AlignLeft);
-        layoutH1->addWidget(UploadKBTotal_label);
-        layoutH1->addWidget(UploadKBTotal);
-        layoutH1->addWidget(UploadKBTotal_units,Qt::AlignLeft);
-
-        DownloadUploadGB->setLayout(layoutH1);
-*/
+    QString ufmt;
+    if (unittype == UnitBYTES){
+        ufmt = "%i MBps";
+    }else{
+        ufmt = "%i Mbps";
     }
+    DownloadStatus = new Status("Received:", this);
+    DownloadStatus->setAxisYLabelFormat(ufmt);
+    UploadStatus = new Status("Sent:", this);
+    UploadStatus->setAxisYLabelFormat(ufmt);
 
     {//Device choice menu
         DropListDeviceChoice = new QComboBox(this);
@@ -120,6 +89,7 @@ void  MainWindow::setupGUI()
         QHBoxLayout *layoutHDropListDevice = new QHBoxLayout;
         layoutHDropListDevice->addWidget(DropListDeviceChoice);
         layoutHDropListDevice->addWidget(PushBDropListSetToCurrent);
+        layoutHDropListDevice->setStretch(0,1);
         DropListDeviceGB->setLayout(layoutHDropListDevice);
     }
 
@@ -131,8 +101,8 @@ void  MainWindow::setupGUI()
     dataScope = new Scope(this);
 
     {//Sets-up the layout
-        QVBoxLayout *mainLayout = new QVBoxLayout;
-
+        //QVBoxLayout *mainLayout = new QVBoxLayout;
+        QGridLayout *mainLayout = new QGridLayout;
         //mainLayout->addWidget(AboutWebsite, Qt::AlignBottom);
 
         mainLayout->addWidget(DropListDeviceGB);
@@ -141,9 +111,9 @@ void  MainWindow::setupGUI()
         mainLayout->addWidget(UploadStatus);
 
         //mainLayout->addWidget(DownloadUploadGB);
-        mainLayout->addWidget(dataScope, Qt::AlignCenter);
+        mainLayout->addWidget(dataScope);
 
-        mainLayout->addWidget(Console, Qt::AlignBottom);
+        mainLayout->addWidget(Console);
 
         setLayout(mainLayout);
     }
@@ -266,7 +236,8 @@ void MainWindow::ChangeDevice()
         delete ThreadL;
         ThreadL = new ThreadListener(&PCHandler);
     }
-
+    DownloadStatus->resetData();
+    UploadStatus->resetData();
     clearMemory();
     OpenDevice(device_No);
     StartCapture();
@@ -340,19 +311,15 @@ void MainWindow::updateGUI()
     }
     float divisor = getDivisor( DataDownloadedSoFar );
     QString DownloadKBTotal_S = DownloadKBTot_S.setNum( static_cast<int>((DataDownloadedSoFar / divisor) ));
-    //DownloadKBTotal->setText(DownloadKBTotal_S);
     QString DownloadKBTotal_units_S = QString( getUnits(DataDownloadedSoFar).c_str());
-    //DownloadKBTotal_units->setText(DownloadKBTotal_units_S);
 
-    DownloadStatus->setTotal(DownloadKBTotal_S + " " + DownloadKBTotal_units_S);
+    DownloadStatus->setTotal(DownloadKBTotal_S, DownloadKBTotal_units_S);
 
     divisor = getDivisor( DataUploadedSoFar );
     QString UploadKBTotal_S = UploadKBTot_S.setNum( static_cast<int>((DataUploadedSoFar / (divisor) ) ));
-    //UploadKBTotal->setText(UploadKBTotal_S);
     QString UploadKBTotal_units_S = QString( getUnits( DataUploadedSoFar ).c_str());
-    //UploadKBTotal_units->setText(UploadKBTotal_units_S);
 
-    UploadStatus->setTotal(UploadKBTotal_S + " " + UploadKBTotal_units_S);
+    UploadStatus->setTotal(UploadKBTotal_S, UploadKBTotal_units_S);
     // #######################################################################
     //current speed kb/s:
     QString DownloadKBpS_S;
@@ -364,11 +331,20 @@ void MainWindow::updateGUI()
     divisor = getDivisor(DataDownloadCurrent);
     int DownloadKBp = static_cast<int>((DataDownloadCurrent/divisor));
     QString DownloadKBp_S = DownloadKBpS_S.setNum(DownloadKBp);
-    //DownloadKBpS->setText(DownloadKBp_S);
     QString DownloadKBpS_units_S = QString( getUnits(DataDownloadCurrent).c_str() + QString("ps"));
-    //DownloadKBpS_units->setText(DownloadKBpS_units_S);
+    int idx=0;
+    if (unittype == UnitBITS){
+        idx = get_BITS_IDX(DownloadKBpS_units_S);
+    } else {
+        idx = get_BYTES_IDX(DownloadKBpS_units_S);
+    }
+    if (idx > DownloadStatus->getUnitIdx()){
+        DownloadStatus->setUnitIdx(idx);
+        DownloadStatus->setCurrent(DownloadKBp_S, DownloadKBpS_units_S);
+    }else{
+        DownloadStatus->setCurrent(DownloadKBp_S);
+    }
 
-    DownloadStatus->setCurrent(DownloadKBp_S + " " + DownloadKBpS_units_S);
 
     float DataUploadCurrent = DataUploadedSinceLastCall;
     if (unittype == UnitBITS){
@@ -377,16 +353,24 @@ void MainWindow::updateGUI()
     divisor = getDivisor(DataUploadCurrent);
     int UploadKBp = static_cast<int>((DataUploadCurrent/divisor));
     QString UploadKBp_S = UploadKBpS_S.setNum(UploadKBp);
-    //UploadKBpS->setText(UploadKBp_S);
     QString UploadKBpS_units_S = QString( getUnits(DataUploadCurrent).c_str() + QString("ps"));
-    //UploadKBpS_units->setText(UploadKBpS_units_S);
+    if (unittype == UnitBITS){
+        idx = get_BITS_IDX(UploadKBpS_units_S);
+    } else {
+        idx = get_BYTES_IDX(UploadKBpS_units_S);
+    }
+    if (idx > UploadStatus->getUnitIdx()){
+        UploadStatus->setUnitIdx(idx);
+        UploadStatus->setCurrent(UploadKBp_S, UploadKBpS_units_S);
+    }else{
+        UploadStatus->setCurrent(UploadKBp_S);
+    }
 
-    UploadStatus->setCurrent(UploadKBp_S + " " + UploadKBpS_units_S);
-
-    //update chart data
-    DownloadStatus->addData(static_cast<qreal>(curTime), DownloadKBp);
-    UploadStatus->addData(static_cast<qreal>(curTime), UploadKBp);
-
+    //update chart data (unit should be MB/Mb? for chart to show)
+    //DownloadStatus->addData(static_cast<qreal>(curTime), DownloadKBp);
+    //UploadStatus->addData(static_cast<qreal>(curTime), UploadKBp);
+    DownloadStatus->addData(static_cast<qreal>(curTime), static_cast<int>(DataDownloadCurrent/(1000.0f*1000.0f)));
+    UploadStatus->addData(static_cast<qreal>(curTime), static_cast<int>(DataUploadCurrent/(1000.0f*1000.0f)));
     //Update the messages
     Console->Display_Messages( PCHandler.get_messages() );
 }
@@ -394,14 +378,15 @@ void MainWindow::updateGUI()
 void MainWindow::updateKBPS()
 {
     //Refrest timestamp, fush data if needed (new day)
+    if (0){
+        //cause not monitor on new day!!
     if ( !is_today(Data_Timestamp) )
         {//New day, flush data
             cout<<"A new day is coming, the birds are chirping."<<endl;
             clearMemory();
         }
-
+    }
     Data_Timestamp = get_time();
-
 
     DataDownloadedSinceLastCall =
     (PCHandler.get_TotalDataDownloaded_bytes() + Download_offset)-LastAmountData_download;
@@ -426,13 +411,6 @@ void MainWindow::updateKBPS()
 
     dataScope->Set_Data(SpeedHist_Download, 0);
     dataScope->Set_Data(SpeedHist_Upload, 1);
-
-    //TODO: update chart data
-//    DownloadStatus->addData(static_cast<qreal>(curTime),
-//                            static_cast<qreal>(DataDownloadedSinceLastCall));
-//    UploadStatus->addData(static_cast<qreal>(curTime),
-//                          static_cast<qreal>(DataUploadedSinceLastCall));
-
 
     SaveDataToFile();
     updateGUI();

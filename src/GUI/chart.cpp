@@ -36,7 +36,7 @@
 #include <QFont>
 #include <QDateTime>
 
-Chart::Chart(QGraphicsItem *parent, Qt::WindowFlags wFlags):
+Chart::Chart(QColor color, QGraphicsItem *parent, Qt::WindowFlags wFlags):
     QChart(QChart::ChartTypeCartesian, parent, wFlags),
     m_series(0),
     m_axisX(new QValueAxis()),
@@ -45,11 +45,8 @@ Chart::Chart(QGraphicsItem *parent, Qt::WindowFlags wFlags):
     m_x(10),
     m_y(1)
 {
-    //QObject::connect(&m_timer, &QTimer::timeout, this, &Chart::handleTimeout);
-    //m_timer.setInterval(1000);
-
     m_series = new QSplineSeries(this);
-    QPen pen(Qt::red);
+    QPen pen(color);
     pen.setWidth(1);
     m_series->setPen(pen);
     m_series->append(m_x, m_y);
@@ -63,17 +60,12 @@ Chart::Chart(QGraphicsItem *parent, Qt::WindowFlags wFlags):
     //
     setLabelsFontSize(8);
     m_axisX->setLabelFormat("%i");
-    m_axisY->setLabelFormat("%i");
-    //showAxisX(false);
+    setAxisYLabelFormat();
+    showAxisX(false);
     //
     m_axisX->setTickCount(10);
-    //we use time stemp as x asix
-    //qint64 curTime = QDateTime::currentSecsSinceEpoch();
-    m_axisX->setRange(0, 60);
-    m_axisY->setTickCount(3);
-    m_axisY->setRange(0, 100);
-
-    //m_timer.start();
+    m_axisY->setTickCount(5);
+    resetData();
 }
 
 Chart::~Chart()
@@ -84,10 +76,14 @@ Chart::~Chart()
 void Chart::addData(qreal x, qreal y)
 {   //add x,y data
     if (y >= m_axisY->max()) {
-        m_axisY->setMax(y+100);
+        m_axisY->setMax(y+200);
+        m_axisY->applyNiceNumbers();
     }
     m_series->append(x, y);
     m_axisX->setMax(m_series->count());
+    if (m_series->count()> 60){
+        m_axisX->setMin(m_series->count()-60);
+    }
 }
 
 void Chart::setLabelsFontSize(int size)
@@ -116,6 +112,23 @@ void Chart::showAxisY(bool show)
     else {
         m_axisY->hide();
     }
+}
+
+void Chart::setAxisYLabelFormat(QString t)
+{
+    m_axisY->setLabelFormat(t);
+}
+
+void Chart::resetData()
+{
+    m_series->clear();
+    m_axisX->setRange(0, 60);
+    m_axisY->setRange(0, 100);
+}
+
+bool Chart::getAxisXVisiable()
+{
+    return m_axisX->isVisible();
 }
 
 void Chart::handleTimeout()

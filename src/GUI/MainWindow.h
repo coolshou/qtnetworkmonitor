@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QDockWidget>
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QTextEdit>
 #include <QGroupBox>
 #include <QComboBox>
@@ -133,25 +134,7 @@ class MainWindow : public QWidget
         Status * DownloadStatus;
         Status * UploadStatus;
 
-        //QGroupBox   *   DownloadUploadGB;
-
         QPushButton *   AboutWebsite;
-
-        //QLabel      *   DownloadKBpS;
-        //QLabel      *   DownloadKBpS_label;
-        //QLabel      *   DownloadKBpS_units;
-
-        //QLabel      *   UploadKBpS;
-        //QLabel      *   UploadKBpS_label;
-        //QLabel      *   UploadKBpS_units;
-
-        //QLabel      *   DownloadKBTotal;
-        //QLabel      *   DownloadKBTotal_label;
-        //QLabel      *   DownloadKBTotal_units;
-
-        //QLabel      *   UploadKBTotal;
-        //QLabel      *   UploadKBTotal_label;
-        //QLabel      *   UploadKBTotal_units;
 
         QComboBox   *   DropListDeviceChoice;
         QGroupBox   *   DropListDeviceGB;

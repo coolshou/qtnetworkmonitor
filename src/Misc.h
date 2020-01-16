@@ -14,14 +14,16 @@ belong to any of the other modules specifically.
 
 #include <assert.h>
 #include <QString>
+#include <QStringList>
+#include <QDebug>
 
 using namespace std;
 
 //Conversions:
-    string int_to_string(int Iin);
-    string ip_to_String(int a,int b, int c, int d);
-    string float_to_string(float Fin);
-    float string_to_float(string Sin);
+string int_to_string(int Iin);
+string ip_to_String(int a,int b, int c, int d);
+string float_to_string(float Fin);
+float string_to_float(string Sin);
 
 //!Gets a string representing the current time.
 string get_time();
@@ -38,4 +40,13 @@ bool is_today(string);
 QString get_username();
 bool is_root();
 
+static QStringList slBYTES= (QStringList()<<"Bps"<<"KBps"<<"MBps"
+                             <<"GBps"<<"TBps"<<"PBps"
+                             <<"EBps"<<"ZBps"<<"YBps");
+int get_BYTES_IDX(QString s);
+
+static QStringList slBITS= (QStringList()<<"bps"<<"Kbps"<<"Mbps"
+                             <<"Gbps"<<"Tbps"<<"Pbps"
+                             <<"Ebps"<<"Zbps"<<"Ybps");
+int get_BITS_IDX(QString s);
 #endif
