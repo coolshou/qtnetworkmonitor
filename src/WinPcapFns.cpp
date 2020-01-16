@@ -1,4 +1,5 @@
 #include "WinPcapFns.h"
+#include <QDebug>
 
 PcapHandler::PcapHandler()
 {
@@ -33,53 +34,53 @@ int PcapHandler::FindAvailDevices(vector<string> * outDevices)
         outDevices->clear();
     }
 
-	pcap_if_t *d;// Iterator
-	char errbuf[PCAP_ERRBUF_SIZE];
+    pcap_if_t *d;// Iterator
+    char errbuf[PCAP_ERRBUF_SIZE];
 
-	/* Retrieve the device list */
-	if(pcap_findalldevs(&alldevs, errbuf) == -1)
-	{
-	    //Has to be changed to handle the error message in errbuf
-		messages.push_back("Error: (in pcap_findalldevs...)");
-		pcap_freealldevs(alldevs);
-		return(-1);
-	}
+    /* Retrieve the device list */
+    if(pcap_findalldevs(&alldevs, errbuf) == -1)
+    {
+        //Has to be changed to handle the error message in errbuf
+        messages.push_back("Error: (in pcap_findalldevs...)");
+        pcap_freealldevs(alldevs);
+        return(-1);
+    }
 
-	/* Print the list */
-	int i=0;
-	for(d=alldevs; d; d=d->next)
-	{
-	    if (i==0)
+    /* Print the list */
+    int i=0;
+    for(d=alldevs; d; d=d->next)
+    {
+        if (i==0)
             messages.push_back("Found available devices:");
+        //qDebug() << "flags:" << d->flags << endl;
+        if (!(d->flags & PCAP_IF_LOOPBACK)){// ignore loopback device
+            if (d->flags & PCAP_IF_UP){ // only device is up
+                string Dname(d->name);
+                string Ddesc;
+                //string Dmac(iptos(d->addresses)); // ip address structure
+                if (d->description){
+                    Ddesc = d->description;
+                }else{
+                    Ddesc = "No description available";
+                }
+                i++;
+                Ndevices = i;
 
-        string Dname(d->name);
-        string Ddesc;
+                outDevices->push_back(int_to_string(i) + ": " + Dname + " : " + Ddesc);
+                messages.push_back(int_to_string(i) + ": " + Dname + " : " + Ddesc);
+            }
+        }
+    }
 
-		if (d->description)
-		{
-            Ddesc = d->description;
-		}
-		else
-		{
-            Ddesc = "No description available";
-		}
-
-		i++;
-		Ndevices = i;
-
-        outDevices->push_back(int_to_string(i) + ": " + Dname + " : " + Ddesc);
-		messages.push_back(int_to_string(i) + ": " + Dname + " : " + Ddesc);
-	}
-
-	if(i==0)
-	{
+    if(i==0)
+    {
         messages.push_back("Error: no interfaces found! Make sure WinPcap(Windows) or pcap(Unix) is installed.");
         messages.push_back("If the application is running under Linux, make sure to run it as root. (sudo appname).");
         pcap_freealldevs(alldevs);
-		return(-1);
-	}
+        return(-1);
+    }
 
-	return 0;
+    return 0;
 }
 
 int PcapHandler::openDevice(int inum)
@@ -143,14 +144,14 @@ int PcapHandler::CheckIfCurrDeviceReady()
 #define IPTOSBUFFERS	12
 char *iptos(u_long in)
 {
-	static char output[IPTOSBUFFERS][3*4+3+1];
-	static short which;
-	u_char *p;
+    static char output[IPTOSBUFFERS][3*4+3+1];
+    static short which;
+    u_char *p;
 
-	p = (u_char *)&in;
-	which = (which + 1 == IPTOSBUFFERS ? 0 : which + 1);
-	sprintf(output[which], "%d.%d.%d.%d", p[0], p[1], p[2], p[3]);
-	return output[which];
+    p = (u_char *)&in;
+    which = (which + 1 == IPTOSBUFFERS ? 0 : which + 1);
+    sprintf(output[which], "%d.%d.%d.%d", p[0], p[1], p[2], p[3]);
+    return output[which];
 }
 void PcapHandler::clearIPv4Addr(){
     ipv4adds *elt;
