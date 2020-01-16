@@ -54,13 +54,16 @@ int PcapHandler::FindAvailDevices(vector<string> * outDevices)
             messages.push_back("Found available devices:");
         //qDebug() << "flags:" << d->flags << endl;
         if (!(d->flags & PCAP_IF_LOOPBACK)){// ignore loopback device
+            #ifdef Q_OS_LINUX
             if (d->flags & PCAP_IF_UP){ // only device is up
+            #endif
                 string Dname(d->name);
                 string Ddesc;
                 //string Dmac(iptos(d->addresses)); // ip address structure
                 if (d->description){
                     Ddesc = d->description;
                 }else{
+                    //TODO: no description is hard to tell which device is using, try other way to get humin readable desc
                     Ddesc = "No description available";
                 }
                 i++;
@@ -68,7 +71,9 @@ int PcapHandler::FindAvailDevices(vector<string> * outDevices)
 
                 outDevices->push_back(int_to_string(i) + ": " + Dname + " : " + Ddesc);
                 messages.push_back(int_to_string(i) + ": " + Dname + " : " + Ddesc);
+            #ifdef Q_OS_LINUX
             }
+            #endif
         }
     }
 

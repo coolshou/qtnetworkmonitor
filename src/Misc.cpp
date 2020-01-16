@@ -2,6 +2,13 @@
 #include <QtGlobal>
 #include <QtDebug>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <winbase.h>
+#ifndef MAX_USERNAME
+#define MAX_USERNAME        256    // Maximum number of characters in a user's name
+#endif
+#endif
 #ifdef Q_OS_LINUX
 #include <unistd.h>
 #include <sys/types.h>
@@ -98,11 +105,13 @@ bool is_today(string S_in)
 QString get_username()
 {
 #ifdef Q_OS_WIN
-    char acUserName[MAX_USERNAME];
+    //char acUserName[MAX_USERNAME];
+    wchar_t acUserName[MAX_USERNAME];
     DWORD nUserName = sizeof(acUserName);
     if (GetUserName(acUserName, &nUserName))
         //qDebug() << acUserName;
-        return QString::fromLocal8Bit(acUserName);
+        //return QString::fromLocal8Bit(acUserName);
+        return QString::fromStdWString(acUserName);
     return "";
 #endif
 #ifdef Q_OS_LINUX
@@ -121,7 +130,7 @@ bool is_root()
 {
 #ifdef Q_OS_WIN
     //TODO: windows administrator
-    return true
+    return true;
 #endif
 #ifdef Q_OS_LINUX
     uid_t uid = geteuid();
